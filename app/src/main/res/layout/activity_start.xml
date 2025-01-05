@@ -6,52 +6,120 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".SplashActivity">
+    tools:context=".StartActivity">
 
 
-    <ImageView
-        android:id="@+id/splash_image"
-        android:layout_width="412dp"
-        android:layout_height="732dp"
-        android:src="@drawable/splash"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="416dp"
+        android:layout_height="568dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/splash_image"
+            android:layout_width="420dp"
+            android:layout_height="738dp"
+            android:src="@drawable/start"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/main_topic"
+            android:layout_width="242dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="splash_image"
+            android:shadowColor="#000000"
+            android:text="Taste Wave"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#B1684E"
+            android:textSize="48sp"
+            android:textStyle="bold|italic"
+            android:typeface="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sub_topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="4dp"
+            android:text="The Food Delivery App"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_topic" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="84dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#FFFFFF"
+            android:text="Skip"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/main_topic"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:background="#00FFFFFF"
-        android:contentDescription="splash_image"
-        android:shadowColor="#000000"
-        android:text="Taste Wave"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="#B1684E"
-        android:textSize="48sp"
-        android:textStyle="bold|italic"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/sub_topic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Food Delivery App"
-        android:textColor="#FFFFFF"
+        android:text="Get started with Taste Wave"
         android:textSize="20sp"
-        android:textStyle="italic"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+        app:layout_constraintVertical_bias="0.148" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="381dp"
+        android:layout_height="54dp"
+        android:backgroundTint="#000000"
+        android:text="Continue"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_topic" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.254" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="18dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

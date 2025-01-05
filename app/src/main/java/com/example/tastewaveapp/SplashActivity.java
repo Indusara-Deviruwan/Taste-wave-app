@@ -1,6 +1,9 @@
 package com.example.tastewaveapp;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -20,5 +24,12 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //delay for 3 seconds, then  move to the next screen
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, StartActivity.class);
+            startActivity(intent);
+            finish();
+        }, 5000); // 3000 milliseconds = 3 seconds
     }
 }
