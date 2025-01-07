@@ -52,5 +52,13 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Back button to navigate to Sign In
+        Button backButton = findViewById(R.id.buttonBackToSignIn);
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish(); // Optional: Closes this activity
+        });
     }
 }

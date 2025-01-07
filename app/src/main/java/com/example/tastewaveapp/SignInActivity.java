@@ -53,11 +53,21 @@ public class SignInActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(view -> {
             Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
             startActivity(intent); // Navigate to the Sign Up Activity
+            finish();
         });
 
         forgotPasswordTextView.setOnClickListener(view -> {
             Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
+            finish();
         });
+
+        Button skipButton = findViewById(R.id.btn_Skip);
+        skipButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
 }

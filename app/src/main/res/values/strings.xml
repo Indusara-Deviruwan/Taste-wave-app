@@ -10,4 +10,12 @@
     <string name="get_started_with_taste_wave">Get started with Taste Wave</string>
     <string name="Continue">Continue</string>
     <string name="welcome">Welcome</string>
+
+    <string-array name="sort_options">
+        <item>Sort by Name</item>
+        <item>Sort by Rating</item>
+        <item>Sort by Price</item>
+    </string-array>
+
 </resources>
+

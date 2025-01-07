@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- Back Button -->
+    <Button
+        android:id="@+id/buttonBackToSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#673AB7"
+        android:text="Back"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <!-- Email EditText -->
     <EditText
         android:id="@+id/editTextSignUpEmail"
         android:layout_width="0dp"
@@ -14,8 +27,9 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonBackToSignIn" />
 
+    <!-- Password EditText -->
     <EditText
         android:id="@+id/editTextSignUpPassword"
         android:layout_width="0dp"
@@ -27,6 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextSignUpEmail" />
 
+    <!-- Confirm Password EditText -->
     <EditText
         android:id="@+id/editTextSignUpConfirmPassword"
         android:layout_width="0dp"
@@ -38,6 +53,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextSignUpPassword" />
 
+    <!-- Sign Up Button -->
     <Button
         android:id="@+id/buttonSignUp"
         android:layout_width="0dp"
