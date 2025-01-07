@@ -3,35 +3,61 @@ package com.example.tastewaveapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 
 public class SignInActivity extends AppCompatActivity {
+
+    private EditText emailEditText, passwordEditText;
+    private Button signInButton, signUpButton; // Added signUpButton
+    private TextView forgotPasswordTextView;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_signin);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        emailEditText = findViewById(R.id.editTextTextEmailAddress);
+        passwordEditText = findViewById(R.id.editTextTextPassword);
+        signInButton = findViewById(R.id.btn_SignIn);
+        signUpButton = findViewById(R.id.btn_SignUp);// Reference the Sign Up button
+        forgotPasswordTextView = findViewById(R.id.textView11);
+        databaseHelper = new DatabaseHelper(this);
+
+
+        // Handle Sign In
+        signInButton.setOnClickListener(view -> {
+            String email = emailEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(SignInActivity.this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+            } else {
+                boolean isValid = databaseHelper.checkUser(email, password);
+                if (isValid) {
+                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                    intent.putExtra("email", email); // Pass user email to HomeActivity
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(SignInActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
-        //attach button to a button object
-        Button btn_SignIn = findViewById(R.id.btn_SignIn);
+        // Handle Sign Up
+        signUpButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+            startActivity(intent); // Navigate to the Sign Up Activity
+        });
 
-        btn_SignIn.setOnClickListener(view -> {
-            //when click on skip button go to the home screen
-            Intent intent = new Intent(SignInActivity.this,HomeActivity.class);
+        forgotPasswordTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
-            finish();//prevent going back to the login screen
         });
     }
 }

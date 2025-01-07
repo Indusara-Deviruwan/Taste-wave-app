@@ -1,6 +1,7 @@
 package com.example.tastewaveapp;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +21,12 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        TextView welcomeTextView = findViewById(R.id.welcomeTextView);
+
+        // Retrieve user email from Intent
+        String userEmail = getIntent().getStringExtra("email");
+        welcomeTextView.setText("Welcome, " + userEmail);
     }
 }
