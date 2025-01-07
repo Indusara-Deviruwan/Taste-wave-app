@@ -10,28 +10,27 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+        android:id="@+id/lay_upper_body"
         android:layout_width="416dp"
         android:layout_height="568dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/splash_image"
-            android:layout_width="420dp"
-            android:layout_height="738dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/start"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="1.3"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
+            app:layout_constraintVertical_bias="0.100000024"
+            app:layout_constraintWidth_percent="1" />
 
         <TextView
             android:id="@+id/main_topic"
@@ -40,9 +39,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:background="#00FFFFFF"
-            android:contentDescription="splash_image"
+            android:contentDescription="@string/splash_image"
             android:shadowColor="#000000"
-            android:text="Taste Wave"
+            android:text="@string/taste_wave"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#B1684E"
@@ -58,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="4dp"
-            android:text="The Food Delivery App"
+            android:text="@string/the_food_delivery_app"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="italic"
@@ -66,17 +65,31 @@
             app:layout_constraintTop_toBottomOf="@+id/main_topic" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_skip"
             android:layout_width="84dp"
             android:layout_height="40dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:backgroundTint="#FFFFFF"
-            android:text="Skip"
+            android:text="@string/skip"
             android:textColor="#000000"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,42 +97,26 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get started with Taste Wave"
+        android:text="@string/get_started_with_taste_wave"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_continue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        app:layout_constraintVertical_bias="0.148" />
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lay_upper_body" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="381dp"
-        android:layout_height="54dp"
+        android:id="@+id/btn_continue"
+        android:layout_width="376dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
         android:backgroundTint="#000000"
-        android:text="Continue"
+        android:text="continue"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.254" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="20dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="18dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

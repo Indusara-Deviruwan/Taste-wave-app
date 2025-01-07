@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Taste wave app</string>
+    <string name="wave_image">wave_image</string>
+    <string name="taste">Taste</string>
+    <string name="wave">Wave</string>
+    <string name="splash_image">splash_image</string>
+    <string name="taste_wave">Taste Wave</string>
+    <string name="the_food_delivery_app">The Food Delivery App</string>
+    <string name="skip">Skip</string>
+    <string name="get_started_with_taste_wave">Get started with Taste Wave</string>
+    <string name="Continue">Continue</string>
 </resources>

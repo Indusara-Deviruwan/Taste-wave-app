@@ -10,49 +10,70 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="299dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/wave_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.893"
+            app:layout_constraintWidth_percent="0.4"
+            app:srcCompat="@drawable/wave_b" />
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="134dp"
             android:layout_height="54dp"
-            android:text="Taste"
+            android:text="@string/taste"
             android:textColor="#FFFFFF"
             android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.747"
+            app:layout_constraintHorizontal_bias="0.711"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4" />
+            app:layout_constraintVertical_bias="0.408" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="127dp"
             android:layout_height="60dp"
-            android:text="Wave"
+            android:text="@string/wave"
             android:textColor="#B1684E"
             android:textSize="48sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.753"
+            app:layout_constraintHorizontal_bias="0.693"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            app:layout_constraintVertical_bias="0.097" />
+            app:layout_constraintVertical_bias="0.0" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="151dp"
-            android:layout_height="136dp"
-            tools:layout_editor_absoluteX="56dp"
-            tools:layout_editor_absoluteY="89dp"
-            tools:srcCompat="@drawable/wi" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="36dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="36dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
