@@ -125,14 +125,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Food Operations
-    public boolean insertFood(String name, String description, int imageResId, double price, int restaurantId) {
+    public boolean insertFood(String name, String description, int imageResId, double price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_FOOD_NAME, name);
         values.put(COLUMN_FOOD_DESCRIPTION, description);
         values.put(COLUMN_FOOD_IMAGE, imageResId);
         values.put(COLUMN_FOOD_PRICE, price);
-        values.put(COLUMN_RESTAURANT_FK, restaurantId);
+        //values.put(COLUMN_RESTAURANT_FK, restaurantId);
 
         long result = db.insert(TABLE_FOODS, null, values);
         db.close();
@@ -140,9 +140,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Cursor getFoodsByRestaurant(int restaurantId) {
+    public Cursor getAllFoodItemsByRestaurant() {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_FOODS + " WHERE " + COLUMN_RESTAURANT_FK + "=?";
-        return db.rawQuery(query, new String[]{String.valueOf(restaurantId)});
+        return db.rawQuery("SELECT * FROM " + TABLE_FOODS, null);
     }
 }

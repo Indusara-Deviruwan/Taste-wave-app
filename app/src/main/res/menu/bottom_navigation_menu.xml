@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/start"
+        android:title="Profile" />
+
+    <item
+        android:id="@+id/nav_orders"
+        android:icon="@drawable/start"
+        android:title="Orders" />
+
+    <item
+        android:id="@+id/nav_payment"
+        android:icon="@drawable/start"
+        android:title="Payment" />
+
+    <item
+        android:id="@+id/nav_offers"
+        android:icon="@drawable/start"
+        android:title="Offers" />
+
+</menu>
