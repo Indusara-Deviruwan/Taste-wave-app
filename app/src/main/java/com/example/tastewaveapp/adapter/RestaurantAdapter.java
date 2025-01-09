@@ -1,5 +1,6 @@
 package com.example.tastewaveapp.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,15 @@ import java.util.List;
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> {
 
     private List<Restaurant> restaurantList;
+    private OnRestaurantClickListener listener;
 
-    public RestaurantAdapter(List<Restaurant> restaurantList) {
+    public interface OnRestaurantClickListener {
+        void onRestaurantClick(Restaurant restaurant);
+    }
+
+    public RestaurantAdapter(List<Restaurant> restaurantList, OnRestaurantClickListener listener) {
         this.restaurantList = restaurantList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -35,6 +42,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         holder.restaurantName.setText(restaurant.getName());
         holder.restaurantDescription.setText(restaurant.getDescription());
         holder.restaurantImage.setImageResource(restaurant.getImageResId());
+
+        // Set click listener
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onRestaurantClick(restaurant);
+            }
+        });
     }
 
     @Override
@@ -46,7 +60,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         TextView restaurantName, restaurantDescription;
         ImageView restaurantImage;
 
-        public RestaurantViewHolder(View itemView) {
+        public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             restaurantName = itemView.findViewById(R.id.restaurant_name);
             restaurantDescription = itemView.findViewById(R.id.restaurant_description);
@@ -54,4 +68,3 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         }
     }
 }
-

@@ -1,9 +1,8 @@
-package com.example.tastewaveapp;
+package com.example.tastewaveapp.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.tastewaveapp.R;
 
 @SuppressLint("CustomSplashScreen")
 public class StartActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class StartActivity extends AppCompatActivity {
 
         btnSkip.setOnClickListener(view -> {
             //when click on skip button go to the home screen
-            Intent intent = new Intent(StartActivity.this,HomeActivity.class);
+            Intent intent = new Intent(StartActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();//prevent going back to the login screen
         });
