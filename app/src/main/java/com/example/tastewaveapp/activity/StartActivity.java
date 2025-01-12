@@ -41,7 +41,7 @@ public class StartActivity extends AppCompatActivity {
 
         btnContinue.setOnClickListener(view -> {
             //when click on continue button go to the login screen
-            Intent intent = new Intent(StartActivity.this,SignInActivity.class);
+            Intent intent = new Intent(StartActivity.this, LogInActivity.class);
             startActivity(intent);
             finish();//prevent going back to the login screen
 

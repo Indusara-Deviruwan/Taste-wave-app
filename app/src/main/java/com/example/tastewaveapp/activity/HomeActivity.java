@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
-        //databaseHelper.insertRestaurant("MR.Kottu","good kottu", R.drawable.start);
+        databaseHelper.insertRestaurant("MR.Kottu","good kottu", R.drawable.start);
 
         // Fetch restaurants from the database
         restaurantList = new ArrayList<>();

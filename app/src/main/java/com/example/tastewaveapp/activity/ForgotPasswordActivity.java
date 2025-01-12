@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,7 +19,7 @@ import com.example.tastewaveapp.databasehelper.DatabaseHelper;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText emailEditText;
-    private Button resetPasswordButton, backToSignInButton;
+    private ImageButton backToSignInButton;
     private DatabaseHelper databaseHelper; // Assuming you have a DatabaseHelper for user management.
 
     @Override
@@ -33,13 +34,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
         emailEditText = findViewById(R.id.editTextForgotPasswordEmail);
-        resetPasswordButton = findViewById(R.id.buttonResetPassword);
         backToSignInButton = findViewById(R.id.buttonBackToSignIn);
 
         databaseHelper = new DatabaseHelper(this);
 
         // Handle Reset Password
-        resetPasswordButton.setOnClickListener(view -> {
+    /*    resetPasswordButton.setOnClickListener(view -> {
             String email = emailEditText.getText().toString().trim();
 
             if (email.isEmpty()) {
@@ -54,11 +54,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         "Email is not registered",
                         Toast.LENGTH_SHORT).show();
             }
-        });
+        }); */
 
         // Handle Back to Sign In
         backToSignInButton.setOnClickListener(view -> {
-            Intent intent = new Intent(ForgotPasswordActivity.this, SignInActivity.class);
+            Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
             startActivity(intent);
             finish();
         });

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
                 boolean isInserted = databaseHelper.insertUser(email, password);
                 if (isInserted) {
                     Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                    Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
@@ -53,9 +54,9 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         // Back button to navigate to Sign In
-        Button backButton = findViewById(R.id.buttonBackToSignIn);
-        backButton.setOnClickListener(view -> {
-            Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+        ImageButton backToLogInButton = findViewById(R.id.buttonBackToLogIn);
+        backToLogInButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
             startActivity(intent);
             finish(); // Optional: Closes this activity
         });

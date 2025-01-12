@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     tools:context=".activity.StartActivity">
 
 
@@ -13,6 +12,9 @@
         android:id="@+id/lay_upper_body"
         android:layout_width="416dp"
         android:layout_height="568dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,57 +24,56 @@
             android:id="@+id/splash_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/start"
+            android:layout_marginTop="90dp"
+            android:src="@drawable/splash_3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="1.3"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.100000024"
+            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintWidth_percent="1" />
 
-        <TextView
-            android:id="@+id/main_topic"
-            android:layout_width="242dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:background="#00FFFFFF"
-            android:contentDescription="@string/splash_image"
-            android:shadowColor="#000000"
-            android:text="@string/taste_wave"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="#B1684E"
-            android:textSize="48sp"
-            android:textStyle="bold|italic"
-            android:typeface="normal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/sub_topic"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/the_food_delivery_app"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="italic"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_topic" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/taste"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wave"
+                android:textAllCaps="true"
+                android:textColor="#4CAF50"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_skip"
             android:layout_width="84dp"
             android:layout_height="40dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="#000000"
             android:text="@string/skip"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -97,6 +98,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/get_started_with_taste_wave"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -110,13 +113,15 @@
         android:id="@+id/btn_continue"
         android:layout_width="376dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="#000000"
         android:text="continue"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
