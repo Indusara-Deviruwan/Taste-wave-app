@@ -18,8 +18,9 @@ import com.example.tastewaveapp.databasehelper.DatabaseHelper;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    private EditText emailEditText;
-    private ImageButton backToSignInButton;
+    private EditText emailEditText, editTextForgotPasswordPhone;
+    private ImageButton buttonBackToSignIn;
+    private Button buttonSendDetails;
     private DatabaseHelper databaseHelper; // Assuming you have a DatabaseHelper for user management.
 
     @Override
@@ -34,7 +35,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
         emailEditText = findViewById(R.id.editTextForgotPasswordEmail);
-        backToSignInButton = findViewById(R.id.buttonBackToSignIn);
+        editTextForgotPasswordPhone = findViewById(R.id.editTextForgotPasswordPhone);
+        buttonBackToSignIn = findViewById(R.id.buttonBackToSignIn);
+        buttonSendDetails = findViewById(R.id.buttonSendDetails);
+
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -57,8 +61,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }); */
 
         // Handle Back to Sign In
-        backToSignInButton.setOnClickListener(view -> {
+        buttonBackToSignIn.setOnClickListener(view -> {
             Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        buttonSendDetails.setOnClickListener(view -> {
+            Intent intent = new Intent(ForgotPasswordActivity.this, EnterOtpActivity.class);
             startActivity(intent);
             finish();
         });

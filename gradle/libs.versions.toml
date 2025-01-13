@@ -14,6 +14,8 @@ circleimageview = "3.1.0"
 recyclerview_animators = "4.0.2"
 pageindicatorview = "1.0.3"
 wave_loading_view = "1.0.5"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.1.0"
 
 
 [libraries]
@@ -32,8 +34,10 @@ circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.re
 recyclerview_animators = { group = "jp.wasabeef", name = "recyclerview-animators", version.ref = "recyclerview_animators" }
 pageindicatorview = { group = "com.github.romandanylyk", name = "PageIndicatorView", version.ref = "pageindicatorview" }
 wave_loading_view = { group = "com.scwang.wave", name = "WaveLoadingView", version.ref = "wave_loading_view" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

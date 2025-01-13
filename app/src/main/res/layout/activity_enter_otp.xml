@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:id="@id/main"
     tools:context=".activity.EnterOtpActivity">
 
     <!-- Title Text -->
@@ -17,11 +18,11 @@
     <!-- Verify OTP Button -->
 
     <ImageButton
-        android:id="@+id/buttonBackToSignIn"
+        android:id="@+id/buttonBackToForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
         android:backgroundTint="#002B2D30"
         material:layout_constraintStart_toStartOf="parent"

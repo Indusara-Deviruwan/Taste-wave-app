@@ -3,9 +3,17 @@ package com.example.tastewaveapp.activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +23,8 @@ import com.example.tastewaveapp.adapter.RestaurantAdapter;
 import com.example.tastewaveapp.databasehelper.DatabaseHelper;
 import com.example.tastewaveapp.model.Restaurant;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +36,49 @@ public class HomeActivity extends AppCompatActivity {
     private RestaurantAdapter restaurantAdapter;
     private List<Restaurant> restaurantList;
     private DatabaseHelper databaseHelper;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private TextView textView4;
+    private Button buttonSignOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        textView4 = findViewById(R.id.textView4);
+        buttonSignOut = findViewById(R.id.buttonSignOut);
+
+        //check if the user already signed in
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        if (user == null){
+            String show = "click here to log-in";
+            textView4.setText(show);
+        }
+        else {
+            textView4.setText(user.getEmail());
+        }
+
+        // Set up button click listeners
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle sign-up logic (this is just a placeholder)
+                Toast.makeText(HomeActivity.this, "You are Signed out", Toast.LENGTH_SHORT).show();
+
+                // Navigate to Log-in Activity
+                FirebaseAuth.getInstance().signOut();
+                String show = "click here to log-in";
+                textView4.setText(show);
+            }
+        });
 
         ImageButton cartButton = findViewById(R.id.cart_button);
         cartButton.setOnClickListener(v -> {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "800355178080",
+    "project_id": "taste-wave-app-7e402",
+    "storage_bucket": "taste-wave-app-7e402.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800355178080:android:9651037bf6e362d0689505",
+        "android_client_info": {
+          "package_name": "com.example.tastewaveapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuJqYQvhs-AioWQ_5s38kdYgjGDlAIPKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
