@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +53,28 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
-        textView4 = findViewById(R.id.textView4);
+        findViewById(R.id.toggle_button).setOnClickListener(view -> {
+            PopupMenu popupMenu = new PopupMenu(HomeActivity.this, view);
+            popupMenu.getMenuInflater().inflate(R.menu.toolbar_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                int id = menuItem.getItemId();
+                if (id == R.id.action_messages) {
+                    Toast.makeText(this, "Orders Selected", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.action_notifications) {
+                    Toast.makeText(this, "Offers Selected", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.action_profile) {
+                    Toast.makeText(this, "Favorites Selected", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            });
+            popupMenu.show();
+        });
+
+
+        textView4 = findViewById(R.id.textViewWelcome);
         buttonSignOut = findViewById(R.id.buttonSignOut);
 
         //check if the user already signed in
@@ -79,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
                 textView4.setText(show);
             }
         });
-
+/*
         ImageButton cartButton = findViewById(R.id.cart_button);
         cartButton.setOnClickListener(v -> {
             // Navigate to CartActivity
@@ -87,13 +109,16 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
+*/
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+            // Pass the user ID to ProfileActivity
+
             if (id == R.id.nav_profile) {
                 // Navigate to Profile Activity
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+
                 return true;
             } else if (id == R.id.nav_orders) {
                 // Navigate to Orders Activity
@@ -117,7 +142,7 @@ public class HomeActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
-        databaseHelper.insertRestaurant("MR.Kottu","good kottu", R.drawable.start);
+        //databaseHelper.insertRestaurant("MR.Kottu","good kottu", R.drawable.start);
 
         // Fetch restaurants from the database
         restaurantList = new ArrayList<>();

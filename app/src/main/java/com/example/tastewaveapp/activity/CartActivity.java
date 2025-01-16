@@ -24,7 +24,7 @@ public class CartActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+/*
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -47,5 +47,7 @@ public class CartActivity extends AppCompatActivity {
             }
             return false;
         });
+
+ */
     }
 }

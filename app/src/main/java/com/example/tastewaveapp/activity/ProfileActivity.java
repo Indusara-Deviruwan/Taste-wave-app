@@ -34,6 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -62,8 +63,6 @@ public class ProfileActivity extends AppCompatActivity {
         emailField = findViewById(R.id.email_field);
         phoneField = findViewById(R.id.phone_field);
         saveButton = findViewById(R.id.save_button);
-        changePasswordButton = findViewById(R.id.change_password_button);
-        logoutButton = findViewById(R.id.logout_button);
         editPictureButton = findViewById(R.id.edit_picture_button);
 
         /*

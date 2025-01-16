@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_messages"
+        android:icon="@drawable/wave_b"
+        android:title="Messages"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_notifications"
+        android:icon="@drawable/splash_2"
+        android:title="Notifications"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/splash_4"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+</menu>
