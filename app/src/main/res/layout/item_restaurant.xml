@@ -1,0 +1,105 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:backgroundTint="@android:color/white"
+    android:descendantFocusability="blocksDescendants"
+    android:clipToPadding="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Restaurant Image -->
+        <ImageView
+            android:id="@+id/restaurant_image"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/splash_3"
+            android:contentDescription="Restaurant Image"
+            android:clipToOutline="true"/>
+
+        <!-- Details Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Restaurant Name -->
+            <TextView
+                android:id="@+id/restaurant_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Restaurant Name"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="#333333" />
+
+            <!-- Restaurant Description -->
+            <TextView
+                android:id="@+id/restaurant_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is the description of the restaurant."
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginTop="4dp" />
+
+            <!-- Additional Info -->
+            <TextView
+                android:id="@+id/restaurant_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating: 4.5 ⭐"
+                android:textSize="14sp"
+                android:textColor="#FF5722"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/restaurant_delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delivery Time: 30-40 mins"
+                android:textSize="14sp"
+                android:textColor="#008577"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Favorite & Options Buttons -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Favorite Button -->
+            <ImageButton
+                android:id="@+id/buttonFavorite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/splash_2"
+                android:contentDescription="Add to Favorites" />
+
+            <!-- Options Menu Button -->
+            <ImageButton
+                android:id="@+id/buttonOptions"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/splash_4"
+                android:contentDescription="More Options" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

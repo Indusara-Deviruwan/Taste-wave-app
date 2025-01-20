@@ -65,9 +65,9 @@ public class RestaurantActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         // Get restaurant details from intent
-        String restaurantName = getIntent().getStringExtra("restaurant_name");
-        String restaurantDescription = getIntent().getStringExtra("restaurant_description");
-        int restaurantImageResId = getIntent().getIntExtra("restaurant_image", 0);
+        String restaurantName = getIntent().getStringExtra("RESTAURANT_NAME");
+        String restaurantDescription = getIntent().getStringExtra("RESTAURANT_DESCRIPTION");
+        int restaurantImageResId = getIntent().getIntExtra("RESTAURANT_IMAGE", 0);
 
         // Set up UI
         TextView nameTextView = findViewById(R.id.restaurant_name);
@@ -82,7 +82,7 @@ public class RestaurantActivity extends AppCompatActivity {
         foodRecyclerView = findViewById(R.id.foodRecyclerView);
         foodRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        databaseHelper.insertFood("MR.Kottu","good kottu", R.drawable.start,150);
+        //databaseHelper.insertFood("MR.Kottu","good kottu", R.drawable.start,150);
 
         // Fetch foods from the database
         foodList = new ArrayList<>();
