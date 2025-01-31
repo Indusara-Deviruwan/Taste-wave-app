@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.tastewaveapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,27 +25,14 @@ public class OrderActivity extends AppCompatActivity {
             return insets;
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_profile) {
-                // Navigate to Profile Activity
-                startActivity(new Intent(OrderActivity.this, ProfileActivity.class));
-                return true;
-            } else if (id == R.id.nav_orders) {
-                // Navigate to Orders Activity
-                startActivity(new Intent(OrderActivity.this, OrderActivity.class));
-                return true;
-            } else if (id == R.id.nav_payment) {
-                // Navigate to Payment Activity
-                startActivity(new Intent(OrderActivity.this, PaymentActivity.class));
-                return true;
-            } else if (id == R.id.nav_offers) {
-                // Navigate to Offers Activity
-                startActivity(new Intent(OrderActivity.this, OffersActivity.class));
-                return true;
-            }
-            return false;
-        });
+        // Setup Bottom Navigation
+        setupBottomNavigation();
+
+
+    }
+
+    @Override
+    protected int getSelectedMenuItemId() {
+        return R.id.nav_orders;
     }
 }

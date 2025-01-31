@@ -7,23 +7,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.tastewaveapp.R;
 import com.example.tastewaveapp.adapter.RestaurantAdapter;
 import com.example.tastewaveapp.model.Restaurants;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     private static final String TAG = "HomeActivity";
     private FirebaseFirestore db;
@@ -39,6 +35,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Setup Bottom Navigation
+        setupBottomNavigation();
 
         listView = findViewById(R.id.listView);
         textViewWelcome = findViewById(R.id.textViewWelcome);
@@ -67,25 +66,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        // Bottom navigation functionality
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_profile) {
-                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
-                return true;
-            } else if (id == R.id.nav_orders) {
-                startActivity(new Intent(HomeActivity.this, OrderActivity.class));
-                return true;
-            } else if (id == R.id.nav_payment) {
-                startActivity(new Intent(HomeActivity.this, PaymentActivity.class));
-                return true;
-            } else if (id == R.id.nav_offers) {
-                startActivity(new Intent(HomeActivity.this, OffersActivity.class));
-                return true;
-            }
-            return false;
-        });
+    }
+
+    @Override
+    protected int getSelectedMenuItemId() {
+        return R.id.nav_home; // Highlight "Home" in bottom navigation
     }
 
     private void fetchRestaurants() {
@@ -95,13 +80,11 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     restaurantList.clear();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        // Retrieve restaurant details
-                        String restaurantId = document.getId(); // Get Firestore document ID
+                        String restaurantId = document.getId();
                         String name = document.getString("name");
                         String description = document.getString("description");
                         String imageResId = document.getString("imageResId");
 
-                        // Create Restaurant object with Firestore ID
                         Restaurants restaurant = new Restaurants(restaurantId, name, description, imageResId);
                         restaurantList.add(restaurant);
                     }
@@ -119,5 +102,4 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(this, "Failed to load restaurants", Toast.LENGTH_SHORT).show();
                 });
     }
-
 }

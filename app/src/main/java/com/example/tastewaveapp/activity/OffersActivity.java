@@ -25,27 +25,6 @@ public class OffersActivity extends AppCompatActivity {
             return insets;
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_profile) {
-                // Navigate to Profile Activity
-                startActivity(new Intent(OffersActivity.this, ProfileActivity.class));
-                return true;
-            } else if (id == R.id.nav_orders) {
-                // Navigate to Orders Activity
-                startActivity(new Intent(OffersActivity.this, OrderActivity.class));
-                return true;
-            } else if (id == R.id.nav_payment) {
-                // Navigate to Payment Activity
-                startActivity(new Intent(OffersActivity.this, PaymentActivity.class));
-                return true;
-            } else if (id == R.id.nav_offers) {
-                // Navigate to Offers Activity
-                startActivity(new Intent(OffersActivity.this, OffersActivity.class));
-                return true;
-            }
-            return false;
-        });
+
     }
 }
