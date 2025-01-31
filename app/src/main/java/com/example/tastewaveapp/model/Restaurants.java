@@ -1,25 +1,27 @@
 package com.example.tastewaveapp.model;
 
 public class Restaurants {
-    private int id;
+
+    private String id;
     private String name;
     private String description;
     private String imageResId;
 
-    public Restaurants(int id, String name, String description, String imageResId) {
-        this.id = id;
+    public Restaurants(String id,String name, String description, String imageResId) {
+        this.id= id;
         this.name = name;
         this.description = description;
         this.imageResId = imageResId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }

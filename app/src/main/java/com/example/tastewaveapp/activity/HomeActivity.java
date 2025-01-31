@@ -22,7 +22,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -41,42 +40,32 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Initialize UI components
         listView = findViewById(R.id.listView);
         textViewWelcome = findViewById(R.id.textViewWelcome);
 
-        // Initialize Firebase
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        // Check if the user is signed in
         user = auth.getCurrentUser();
-        if (user == null) {
-            textViewWelcome.setText("Click here to log in");
-        } else {
-            textViewWelcome.setText("Welcome, " + user.getEmail());
-        }
+        textViewWelcome.setText(user != null ? "Welcome, " + user.getEmail() : "Click here to log in");
 
-        // Initialize restaurant list and adapter
         restaurantList = new ArrayList<>();
         restaurantAdapter = new RestaurantAdapter(this, restaurantList);
         listView.setAdapter(restaurantAdapter);
 
-        // Fetch restaurants from Firestore
         fetchRestaurants();
 
-        // Handle list item click
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Restaurants restaurant = restaurantList.get(position);
 
-            // Navigate to RestaurantActivity
             Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
-            intent.putExtra("RESTAURANT_ID", restaurant.getId());
+            intent.putExtra("RESTAURANT_ID", restaurant.getId()); // Pass Firestore document ID
             intent.putExtra("RESTAURANT_NAME", restaurant.getName());
             intent.putExtra("RESTAURANT_DESCRIPTION", restaurant.getDescription());
             intent.putExtra("RESTAURANT_IMAGE", restaurant.getImageResId());
             startActivity(intent);
         });
+
 
         // Bottom navigation functionality
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -100,25 +89,23 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void fetchRestaurants() {
-        // Reference to the Firestore collection
         CollectionReference restaurantsRef = db.collection("Restaurants");
 
         restaurantsRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    restaurantList.clear(); // Clear the list before adding new data
+                    restaurantList.clear();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        // Create Restaurant object from Firestore document
-                        Restaurants restaurant = new Restaurants(
-                                Objects.requireNonNull(document.getLong("id")).intValue(),
-                                document.getString("name"),
-                                document.getString("description"),
-                                document.getString("imageResId") // Ensure this matches your Firestore field name
-                        );
+                        // Retrieve restaurant details
+                        String restaurantId = document.getId(); // Get Firestore document ID
+                        String name = document.getString("name");
+                        String description = document.getString("description");
+                        String imageResId = document.getString("imageResId");
 
-                        restaurantList.add(restaurant); // Add restaurant to the list
+                        // Create Restaurant object with Firestore ID
+                        Restaurants restaurant = new Restaurants(restaurantId, name, description, imageResId);
+                        restaurantList.add(restaurant);
                     }
 
-                    // Notify adapter of data changes
                     restaurantAdapter.notifyDataSetChanged();
 
                     if (restaurantList.isEmpty()) {

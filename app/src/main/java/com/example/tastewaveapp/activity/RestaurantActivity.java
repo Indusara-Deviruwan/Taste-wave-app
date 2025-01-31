@@ -1,117 +1,107 @@
 package com.example.tastewaveapp.activity;
 
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_FOOD_DESCRIPTION;
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_FOOD_ID;
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_FOOD_IMAGE;
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_FOOD_NAME;
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_FOOD_PRICE;
-import static com.example.tastewaveapp.databasehelper.DatabaseHelper.COLUMN_RESTAURANT_FK;
-
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tastewaveapp.R;
 import com.example.tastewaveapp.adapter.FoodAdapter;
-import com.example.tastewaveapp.databasehelper.DatabaseHelper;
 import com.example.tastewaveapp.model.Food;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantActivity extends AppCompatActivity {
 
-    private RecyclerView foodRecyclerView;
+    private ListView foodListView;
     private FoodAdapter foodAdapter;
+    private List<String> foodNames;
+    private FirebaseFirestore db;
+    private String restaurantId;
     private List<Food> foodList;
-    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_profile) {
-                // Navigate to Profile Activity
-                startActivity(new Intent(RestaurantActivity.this, ProfileActivity.class));
-                return true;
-            } else if (id == R.id.nav_orders) {
-                // Navigate to Orders Activity
-                startActivity(new Intent(RestaurantActivity.this, OrderActivity.class));
-                return true;
-            } else if (id == R.id.nav_payment) {
-                // Navigate to Payment Activity
-                startActivity(new Intent(RestaurantActivity.this, PaymentActivity.class));
-                return true;
-            } else if (id == R.id.nav_offers) {
-                // Navigate to Offers Activity
-                startActivity(new Intent(RestaurantActivity.this, OffersActivity.class));
-                return true;
-            }
-            return false;
-        });
-
-        // Initialize database helper
-        databaseHelper = new DatabaseHelper(this);
+        // Get Firestore instance
+        db = FirebaseFirestore.getInstance();
 
         // Get restaurant details from intent
+        restaurantId = getIntent().getStringExtra("RESTAURANT_ID");
         String restaurantName = getIntent().getStringExtra("RESTAURANT_NAME");
         String restaurantDescription = getIntent().getStringExtra("RESTAURANT_DESCRIPTION");
-        int restaurantImageResId = getIntent().getIntExtra("RESTAURANT_IMAGE", 0);
+        String restaurantImageResId = getIntent().getStringExtra("RESTAURANT_IMAGE");
 
         // Set up UI
         TextView nameTextView = findViewById(R.id.restaurant_name);
         TextView descriptionTextView = findViewById(R.id.restaurant_description);
         ImageView restaurantImageView = findViewById(R.id.restaurant_image);
+        foodListView = findViewById(R.id.foodListView);
 
         nameTextView.setText(restaurantName);
         descriptionTextView.setText(restaurantDescription);
-        restaurantImageView.setImageResource(restaurantImageResId);
+        Glide.with(this).load(restaurantImageResId).into(restaurantImageView);
 
-        // Set up RecyclerView for food list
-        foodRecyclerView = findViewById(R.id.foodRecyclerView);
-        foodRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //databaseHelper.insertFood("MR.Kottu","good kottu", R.drawable.start,150);
-
-        // Fetch foods from the database
+        // Initialize list and adapter
         foodList = new ArrayList<>();
-        Cursor cursor = databaseHelper.getAllFoodItemsByRestaurant();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FOOD_ID));
-                String foodName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOOD_NAME));
-                String foodDescription = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FOOD_DESCRIPTION));
-                int foodImageResId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FOOD_IMAGE));
-                double foodPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_FOOD_PRICE));
-                int restaurantId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_FK));
+        foodNames = new ArrayList<>();
+        foodAdapter = new FoodAdapter(this,foodList);
+        foodListView.setAdapter(foodAdapter);
 
-                foodList.add(new Food(id, foodName, foodDescription, foodImageResId, foodPrice, restaurantId));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
+        // Load food items
+        fetchFoodItems();
 
-        // Set up the adapter with Context, food list, and the OnFoodClickListener
-        foodAdapter = new FoodAdapter(this, foodList, food -> {
-            // Handle food item click
+        // Set item click listener
+        foodListView.setOnItemClickListener((parent, view, position, id) -> {
+            Food selectedFood = foodList.get(position);
             Intent intent = new Intent(RestaurantActivity.this, FoodActivity.class);
-            intent.putExtra("food_name", food.getName());
-            intent.putExtra("food_description", food.getDescription());
-            intent.putExtra("food_image_id", food.getImageResId());
-            intent.putExtra("food_price", food.getPrice());
+            intent.putExtra("food_name", selectedFood.getName());
+            intent.putExtra("food_description", selectedFood.getDescription());
+            intent.putExtra("food_image", selectedFood.getImageResId());
+            intent.putExtra("food_price", selectedFood.getPrice());
             startActivity(intent);
         });
+    }
 
-        foodRecyclerView.setAdapter(foodAdapter);
+    private void fetchFoodItems() {
+        db.collection("Foods")
+                .whereEqualTo("restaurantId", restaurantId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    foodList.clear();
+                    foodNames.clear();
+
+                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                        String id = document.getId();
+                        String name = document.getString("name");
+                        String description = document.getString("description");
+                        String imageResId = document.getString("imageResId");
+                        String price = document.getString("price");
+
+                        Food food = new Food(id, name, description, imageResId, price, restaurantId);
+                        foodList.add(food);
+                        foodNames.add(name);
+                    }
+
+                    foodAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("RestaurantActivity", "Error fetching food items", e);
+                    Toast.makeText(this, "Failed to load food items", Toast.LENGTH_SHORT).show();
+                });
     }
 }

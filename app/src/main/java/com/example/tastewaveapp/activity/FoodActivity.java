@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.tastewaveapp.R;
 
 public class FoodActivity extends AppCompatActivity {
@@ -28,8 +29,8 @@ public class FoodActivity extends AppCompatActivity {
         // Get food details from intent
         String foodName = getIntent().getStringExtra("food_name");
         String foodDescription = getIntent().getStringExtra("food_description");
-        int foodImageResId = getIntent().getIntExtra("food_image", R.drawable.start);
-        double foodPrice  = getIntent().getDoubleExtra("food_price", 0);
+        String foodImageResId = getIntent().getStringExtra("food_image");
+        String foodPrice  = getIntent().getStringExtra("food_price");
 
         // Set up UI
         TextView nameTextView = findViewById(R.id.food_name);
@@ -39,7 +40,7 @@ public class FoodActivity extends AppCompatActivity {
 
         nameTextView.setText(foodName);
         descriptionTextView.setText(foodDescription);
-        foodImageView.setImageResource(foodImageResId);
-        //foodPriceTextView.setInt(foodPrice);
+        Glide.with(this).load(foodImageResId).into(foodImageView);
+        foodPriceTextView.setText(foodPrice);
     }
 }

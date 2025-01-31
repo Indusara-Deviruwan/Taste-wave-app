@@ -2,25 +2,34 @@ package com.example.tastewaveapp.model;
 
 public class Food {
 
-    private int id;
+    private String id;
     private String name;
     private String description;
-    private int imageResId;
-    private double price;
-    private int restaurantId;
+    private String imageResId;
+    private String price;
+    private String restaurantId;
 
-    public Food(int id, String name, String description, int imageResId, double price, int restaurantId) {
+
+    public Food(String id, String name, String description, String imageResId, String price, String restaurantId) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.imageResId = imageResId;
+        this.price = price;
+        this.restaurantId = restaurantId;
     }
 
-    public int getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
@@ -35,23 +44,27 @@ public class Food {
         return description;
     }
 
-    public int getImageResId() {
+    public String getImageResId() {
         return imageResId;
     }
 
-    public double getPrice() {
+    public void setImageResId(String imageResId) {
+        this.imageResId = imageResId;
+    }
+
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public int getRestaurantId() {
+    public String getRestaurantId() {
         return restaurantId;
     }
 
-    public void setRestaurantId(int restaurantId) {
+    public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
     }
 }
