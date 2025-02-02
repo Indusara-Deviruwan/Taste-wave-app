@@ -7,7 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".activity.CartActivity">
 
-    <!-- Toolbar with Custom Background and Cart Button -->
+    <!-- App Bar with Material Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        app:title="Your Cart"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/splash_2">
+    </com.google.android.material.appbar.MaterialToolbar> -->
+
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,125 +28,111 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Your Cart"
-        app:titleTextColor="@android:color/white">
+        app:title="Orders"
+        app:titleTextColor="@android:color/white"/>
 
-        <ImageButton
-            android:id="@+id/cart_button"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="end"
-            android:background="@null"
-            android:contentDescription="Cart"
-            android:padding="8dp"
-            android:src="@drawable/start" />
-    </androidx.appcompat.widget.Toolbar>
+    <!-- Cart Items ListView -->
+    <ListView
+        android:id="@+id/cart_items_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/white"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/promo_code_section" />
 
-    <!-- Cart Items RecyclerView -->
-
-    <!-- Cart Summary Section (with rounded corners and shadow) -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cart_items_recycler_view"
+    <!-- Promo Code Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/promo_code_section"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/white"
-        android:clipToPadding="false"
-        android:elevation="4dp"
-        android:padding="16dp"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/promo_code_section"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <LinearLayout
-        android:id="@+id/checkout_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="78dp"
-        android:orientation="vertical"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/total_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" /> <!-- Custom background drawable -->
+        app:layout_constraintTop_toBottomOf="@+id/cart_items_list_view">
 
-    <!-- Total Price Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            app:layout_constraintBottom_toTopOf="@id/total_price"
+            app:layout_constraintTop_toBottomOf="@id/cart_items_list_view">
 
-    <!-- Checkout Button with Enhanced Style -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:boxStrokeColor="@color/black">
 
-    <!-- Optional: Promo Code Section -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/promo_code_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Promo Code" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/apply_promo_code_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Apply" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Total Price -->
     <TextView
         android:id="@+id/total_price"
-        android:layout_width="match_parent"
-        android:layout_height="33dp"
-        android:layout_gravity="start"
-        android:layout_marginTop="500dp"
-        android:layout_marginEnd="36dp"
-
-        android:paddingBottom="12dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="16dp"
         android:text="Total: $0.00"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/checkout_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/promo_code_section" />
 
-    <Button
+    <!-- Checkout Button -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/checkout_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="84dp"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/black"
-        android:elevation="4dp"
-        android:padding="12dp"
         android:text="Proceed to Checkout"
         android:textColor="@android:color/white"
         android:textSize="16sp"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/total_price" />
+        app:layout_constraintTop_toBottomOf="@id/total_price" />
 
-    <LinearLayout
-        android:id="@+id/promo_code_section"
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/total_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="30dp"
+        app:menu="@menu/bottom_navigation_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText
-            android:id="@+id/promo_code_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="232dp"
-            android:layout_weight="1"
-
-            android:hint="Enter Promo Code"
-            android:inputType="text"
-            android:padding="10dp"
-            android:textColor="@color/black" />
-
-        <Button
-            android:id="@+id/apply_promo_code_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:padding="10dp"
-            android:text="Apply"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-
-
-
-    <!-- Bottom Navigation Bar -->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

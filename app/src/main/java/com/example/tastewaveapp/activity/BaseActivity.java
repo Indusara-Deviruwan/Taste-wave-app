@@ -33,8 +33,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, HomeActivity.class));
                 finish(); // Finish the current activity
                 return true;
-            } else if (id == R.id.nav_search && getSelectedMenuItemId() != R.id.nav_search) {
-                startActivity(new Intent(this, PaymentActivity.class));
+            } else if (id == R.id.nav_cart && getSelectedMenuItemId() != R.id.nav_cart) {
+                startActivity(new Intent(this, CartActivity.class));
                 finish();
                 return true;
             } else if (id == R.id.nav_orders && getSelectedMenuItemId() != R.id.nav_orders) {

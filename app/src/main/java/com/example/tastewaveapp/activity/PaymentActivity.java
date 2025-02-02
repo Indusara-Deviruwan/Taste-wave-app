@@ -32,6 +32,6 @@ public class PaymentActivity extends BaseActivity {
     }
     @Override
     protected int getSelectedMenuItemId() {
-        return R.id.nav_search;
+        return 0;
     }
 }
