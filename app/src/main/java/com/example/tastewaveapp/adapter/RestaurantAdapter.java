@@ -20,17 +20,17 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.tastewaveapp.R;
-import com.example.tastewaveapp.model.Restaurants;
+import com.example.tastewaveapp.model.Restaurant;
 
 import java.util.List;
 
 public class RestaurantAdapter extends BaseAdapter {
 
     private final Context context;
-    private final List<Restaurants> restaurantList;
+    private final List<Restaurant> restaurantList;
     private final LayoutInflater inflater;
 
-    public RestaurantAdapter(Context context, List<Restaurants> restaurantList) {
+    public RestaurantAdapter(Context context, List<Restaurant> restaurantList) {
         this.context = context;
         this.restaurantList = restaurantList;
         this.inflater = LayoutInflater.from(context);
@@ -68,7 +68,7 @@ public class RestaurantAdapter extends BaseAdapter {
         }
 
         // Get the current restaurant
-        Restaurants restaurant = restaurantList.get(position);
+        Restaurant restaurant = restaurantList.get(position);
 
         // Load image from URL using Glide
         Glide.with(context)

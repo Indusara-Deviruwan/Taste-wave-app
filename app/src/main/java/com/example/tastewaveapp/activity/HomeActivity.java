@@ -10,12 +10,13 @@ import android.widget.Toast;
 
 import com.example.tastewaveapp.R;
 import com.example.tastewaveapp.adapter.RestaurantAdapter;
-import com.example.tastewaveapp.model.Restaurants;
+import com.example.tastewaveapp.model.Restaurant;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class HomeActivity extends BaseActivity {
     private ListView listView;
     private TextView textViewWelcome;
     private Button mapButton;
-    private List<Restaurants> restaurantList;
+    private List<Restaurant> restaurantList;
     private RestaurantAdapter restaurantAdapter;
 
     @Override
@@ -65,7 +66,7 @@ public class HomeActivity extends BaseActivity {
         });
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            Restaurants restaurant = restaurantList.get(position);
+            Restaurant restaurant = restaurantList.get(position);
 
             Intent intent = new Intent(HomeActivity.this, RestaurantActivity.class);
             intent.putExtra("RESTAURANT_ID", restaurant.getId()); // Pass Firestore document ID
@@ -99,8 +100,10 @@ public class HomeActivity extends BaseActivity {
                         String name = document.getString("name");
                         String description = document.getString("description");
                         String imageResId = document.getString("imageResId");
+                        String rating = document.getString("rating");
+                        GeoPoint location = document.getGeoPoint("location");
 
-                        Restaurants restaurant = new Restaurants(restaurantId, name, description, imageResId);
+                        Restaurant restaurant = new Restaurant(restaurantId, name, description, imageResId, rating,location);
                         restaurantList.add(restaurant);
                     }
 
