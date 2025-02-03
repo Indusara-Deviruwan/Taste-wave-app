@@ -30,7 +30,15 @@ public class CartActivity extends BaseActivity {
     }
 
     @Override
+    protected String getToolbarTitle() {
+        return "Cart";
+    }
+
+    @Override
     protected int getSelectedMenuItemId() {
         return R.id.nav_cart;
     }
+
+
+
 }

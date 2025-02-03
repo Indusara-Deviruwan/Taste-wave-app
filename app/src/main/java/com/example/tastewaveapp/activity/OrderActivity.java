@@ -32,6 +32,11 @@ public class OrderActivity extends BaseActivity {
     }
 
     @Override
+    protected String getToolbarTitle() {
+        return "Orders";
+    }
+
+    @Override
     protected int getSelectedMenuItemId() {
         return R.id.nav_orders;
     }

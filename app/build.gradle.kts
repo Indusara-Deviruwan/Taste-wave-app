@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.gms.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -51,10 +52,11 @@ dependencies {
     implementation(libs.glide)
     //google-services.json
     implementation(libs.play.services.auth)
-
     // Import the Firebase BoM
     implementation(platform(libs.firebase.bom))
 
+    //
+    implementation(libs.gms.play.services.maps)
 
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies

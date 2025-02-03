@@ -29,7 +29,7 @@ public class StartActivity extends AppCompatActivity {
         if(currentUser != null){
             Intent intent = new Intent(StartActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();
+
 
         }
     }
@@ -54,14 +54,14 @@ public class StartActivity extends AppCompatActivity {
             //when click on skip button go to the home screen
             Intent intent = new Intent(StartActivity.this, HomeActivity.class);
             startActivity(intent);
-            finish();//prevent going back to the login screen
+            //prevent going back to the login screen
         });
 
         btnContinue.setOnClickListener(view -> {
             //when click on continue button go to the login screen
             Intent intent = new Intent(StartActivity.this, LogInActivity.class);
             startActivity(intent);
-            finish();//prevent going back to the login screen
+            //prevent going back to the login screen
 
         });
     }

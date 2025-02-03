@@ -9,8 +9,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.tastewaveapp.R;
@@ -23,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantActivity extends AppCompatActivity {
+public class RestaurantActivity extends BaseActivity {
 
     private ListView foodListView;
     private FoodAdapter foodAdapter;
@@ -35,7 +39,17 @@ public class RestaurantActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_restaurant);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // Setup Bottom Navigation
+        setupBottomNavigation();
+        setupToolbar();
 
         // Get Firestore instance
         db = FirebaseFirestore.getInstance();
@@ -75,6 +89,16 @@ public class RestaurantActivity extends AppCompatActivity {
             intent.putExtra("food_price", selectedFood.getPrice());
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Restaurant";
+    }
+
+    @Override
+    protected int getSelectedMenuItemId() {
+        return -1;
     }
 
     private void fetchFoodItems() {

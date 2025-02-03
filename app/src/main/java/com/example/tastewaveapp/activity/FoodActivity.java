@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.example.tastewaveapp.R;
 
-public class FoodActivity extends AppCompatActivity {
+public class FoodActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,11 @@ public class FoodActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Setup Bottom Navigation
+        setupBottomNavigation();
+
+        setupToolbar();
 
         // Get food details from intent
         String foodName = getIntent().getStringExtra("food_name");
@@ -42,5 +47,15 @@ public class FoodActivity extends AppCompatActivity {
         descriptionTextView.setText(foodDescription);
         Glide.with(this).load(foodImageResId).into(foodImageView);
         foodPriceTextView.setText(foodPrice);
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Foods";
+    }
+
+    @Override
+    protected int getSelectedMenuItemId() {
+        return -1;
     }
 }

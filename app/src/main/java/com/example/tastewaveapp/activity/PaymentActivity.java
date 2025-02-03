@@ -30,6 +30,12 @@ public class PaymentActivity extends BaseActivity {
 
 
     }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Payments";
+    }
+
     @Override
     protected int getSelectedMenuItemId() {
         return 0;

@@ -3,6 +3,7 @@ package com.example.tastewaveapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class HomeActivity extends BaseActivity {
 
     private ListView listView;
     private TextView textViewWelcome;
+    private Button mapButton;
     private List<Restaurants> restaurantList;
     private RestaurantAdapter restaurantAdapter;
 
@@ -38,6 +40,8 @@ public class HomeActivity extends BaseActivity {
 
         // Setup Bottom Navigation
         setupBottomNavigation();
+
+        mapButton = findViewById(R.id.buttonMap);
 
         listView = findViewById(R.id.listView);
         textViewWelcome = findViewById(R.id.textViewWelcome);
@@ -54,6 +58,12 @@ public class HomeActivity extends BaseActivity {
 
         fetchRestaurants();
 
+        //map button
+        mapButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this,RestaurantMapActivity.class);
+            startActivity(intent);
+        });
+
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Restaurants restaurant = restaurantList.get(position);
 
@@ -66,6 +76,11 @@ public class HomeActivity extends BaseActivity {
         });
 
 
+    }
+
+    @Override
+    protected String getToolbarTitle() {
+        return "Taste Wave";
     }
 
     @Override

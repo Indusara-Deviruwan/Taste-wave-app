@@ -47,6 +47,11 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @Override
+    protected String getToolbarTitle() {
+        return "Profile";
+    }
+
+    @Override
     protected int getSelectedMenuItemId() {
         return R.id.nav_profile; // Highlight "Home" in bottom navigation
     }
