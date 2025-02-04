@@ -49,7 +49,7 @@ public class RestaurantActivity extends BaseActivity {
 
         // Setup Bottom Navigation
         setupBottomNavigation();
-        setupToolbar();
+        setupToolbar("Restaurant");
 
         // Get Firestore instance
         db = FirebaseFirestore.getInstance();

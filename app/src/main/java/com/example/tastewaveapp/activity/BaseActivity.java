@@ -16,22 +16,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        setupToolbar();  // Set up toolbar
-        setupBottomNavigation();  // Set up bottom nav
+        //setupToolbar();  // Set up toolbar
+        //setupBottomNavigation();  // Set up bottom nav
     }
 
     // Initialize Toolbar
-    protected void setupToolbar() {
+    protected void setupToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(false); // Hide default title
 
-        /*    // Set dynamic title if needed
-            TextView titleText = findViewById(R.id.toolbar_title);
-            if (titleText != null) {
-                titleText.setText(getToolbarTitle());  // Call abstract method to get title
-            } */
+            // Set dynamic title
+            toolbar.setTitle(title); // Set the dynamic title
+
         }
     }
 

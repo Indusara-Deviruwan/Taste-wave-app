@@ -29,7 +29,7 @@ public class FoodActivity extends BaseActivity {
         // Setup Bottom Navigation
         setupBottomNavigation();
 
-        setupToolbar();
+        setupToolbar("Foods");
 
         // Get food details from intent
         String foodName = getIntent().getStringExtra("food_name");

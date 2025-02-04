@@ -25,6 +25,7 @@ public class CartActivity extends BaseActivity {
             return insets;
         });
 
+        setupToolbar("Cart");  // Set up toolbar
         setupBottomNavigation();
 
     }

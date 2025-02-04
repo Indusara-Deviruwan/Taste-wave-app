@@ -36,6 +36,8 @@ public class ProfileActivity extends BaseActivity {
 
         // Setup Bottom Navigation
         setupBottomNavigation();
+        //tool bar
+        setupToolbar("Profile");
 
         profileImage = findViewById(R.id.profile_image);
         nameField = findViewById(R.id.name_field);

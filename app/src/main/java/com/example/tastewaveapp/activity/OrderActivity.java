@@ -27,6 +27,8 @@ public class OrderActivity extends BaseActivity {
 
         // Setup Bottom Navigation
         setupBottomNavigation();
+        //tool bar
+        setupToolbar("Order");
 
 
     }
