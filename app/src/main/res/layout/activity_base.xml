@@ -9,16 +9,15 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        app:title="Taste Wave"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary_color"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Taste Wave"
         app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:menu="@menu/toolbar_menu">
-
 
     </androidx.appcompat.widget.Toolbar>
 

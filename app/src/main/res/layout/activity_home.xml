@@ -7,35 +7,52 @@
     android:layout_height="match_parent"
     tools:context=".activity.HomeActivity">
 
-    <!-- Toolbar with Search and Toggle -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/primary_color"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="Taste Wave"
         app:titleTextColor="@android:color/white"
         app:menu="@menu/toolbar_menu">
 
-        <!-- SearchView -->
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
+        <!-- Container for SearchView and Location Button -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:iconifiedByDefault="true"
-            android:queryHint="Search Restaurants..."
-            tools:layout_editor_absoluteX="134dp"
-            tools:layout_editor_absoluteY="8dp" />
+            android:orientation="horizontal"
+            android:layout_gravity="right">
 
+            <!-- SearchView -->
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:iconifiedByDefault="true"
+                android:queryHint="Search Restaurants..."
+                android:background="@null"
+                android:padding="4dp"/>
+
+            <!-- Location Button -->
+            <ImageButton
+                android:id="@+id/btn_location"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                android:padding="8dp"
+                android:src="@drawable/location_6"
+                android:contentDescription="Location"/>
+        </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
 
     <!-- Main Body -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,41 +73,6 @@
             android:divider="@color/secondary_color"
             android:dividerHeight="1dp" />
 
-
-        <!-- Welcome TextView -->
-        <TextView
-            android:id="@+id/textViewWelcome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to Taste Wave"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/buttonSignOut"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- test map Button -->
-        <Button
-            android:id="@+id/buttonMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="map"
-            app:layout_constraintBottom_toTopOf="@id/buttonSignOut"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <!-- Sign-Out Button -->
-        <Button
-            android:id="@+id/buttonSignOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Sign Out"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Bottom Navigation -->
