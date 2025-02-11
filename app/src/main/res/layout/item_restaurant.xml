@@ -78,28 +78,21 @@
         <!-- Favorite & Options Buttons -->
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
             <!-- Favorite Button -->
             <ImageButton
                 android:id="@+id/buttonFavorite"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/splash_2"
+                android:src="@drawable/favourite_5"
                 android:contentDescription="Add to Favorites" />
 
-            <!-- Options Menu Button -->
-            <ImageButton
-                android:id="@+id/buttonOptions"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/splash_4"
-                android:contentDescription="More Options" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

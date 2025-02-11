@@ -20,7 +20,9 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.tastewaveapp.R;
+import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
 import com.example.tastewaveapp.model.Food;
+import com.example.tastewaveapp.model.FoodCart;
 
 import java.util.List;
 
@@ -62,6 +64,13 @@ public class FoodAdapter extends BaseAdapter {
             holder.nameTextView = convertView.findViewById(R.id.food_name);
             holder.descriptionTextView = convertView.findViewById(R.id.food_description);
             holder.priceTextView = convertView.findViewById(R.id.food_price);
+            holder.favoriteButton = convertView.findViewById(R.id.buttonFavorite);
+            holder.increaseButton = convertView.findViewById(R.id.btn_increase);
+            holder.decreaseButton = convertView.findViewById(R.id.btn_decrease);
+            holder.cartButton = convertView.findViewById(R.id.buttonAddToCart);
+            holder.quantityTextView = convertView.findViewById(R.id.tv_quantity);
+            holder.quantity = 0; // Default quantity is 1
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -94,6 +103,57 @@ public class FoodAdapter extends BaseAdapter {
         holder.descriptionTextView.setText(food.getDescription());
         holder.priceTextView.setText(food.getPrice());
 
+        // Update quantity display
+        holder.quantityTextView.setText(String.valueOf(holder.quantity));
+
+        // Handle increase button click
+        holder.increaseButton.setOnClickListener(v -> {
+            holder.quantity++;
+            holder.quantityTextView.setText(String.valueOf(holder.quantity));
+        });
+
+        // Handle decrease button click
+        holder.decreaseButton.setOnClickListener(v -> {
+            if (holder.quantity > 0) { // Prevent quantity from going below 1
+                holder.quantity--;
+                holder.quantityTextView.setText(String.valueOf(holder.quantity));
+            }
+        });
+
+        // Handle favorite button click
+        holder.favoriteButton.setOnClickListener(v ->
+                Toast.makeText(context, "Favorite clicked for " + food.getName(), Toast.LENGTH_SHORT).show()
+        );
+
+        // Handle cart button click
+        holder.cartButton.setOnClickListener(v -> {
+            if (holder.quantity > 0) {
+                CartDatabaseHelper dbHelper = new CartDatabaseHelper(context);
+
+                FoodCart foodCart = new FoodCart();
+                foodCart.setName(food.getName());
+                foodCart.setDescription(food.getDescription());
+
+                String priceString = food.getPrice();
+                // Remove the dollar sign and trim whitespace
+                String cleanPrice = priceString.replace("$", "").trim();
+                // Convert to double
+                double price = Double.parseDouble(cleanPrice);
+                // Output: 50.00
+
+                foodCart.setPrice(price);
+                foodCart.setQuantity(holder.quantity);
+                foodCart.setImageUrl(food.getImageResId());
+
+                dbHelper.addToCart(foodCart); // Add item to SQLite database
+                dbHelper.close();
+
+                Toast.makeText(context, "Added " + holder.quantity + " " + food.getName() + " to cart", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Please select at least one item", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return convertView;
     }
@@ -103,6 +163,8 @@ public class FoodAdapter extends BaseAdapter {
         TextView nameTextView;
         TextView descriptionTextView;
         TextView priceTextView;
-
+        TextView quantityTextView;
+        ImageButton favoriteButton, increaseButton, decreaseButton, cartButton;
+        int quantity; // Store quantity per item
     }
 }

@@ -14,7 +14,6 @@
     <string name="google_maps_key">AIzaSyDK7Rx40amcyl22adOdOzLhnGL7xCFAbBU</string>
 
 
-
     <string-array name="sort_options">
         <item>Sort by Name</item>
         <item>Sort by Rating</item>

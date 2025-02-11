@@ -31,6 +31,7 @@ public class RestaurantAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
 
     public RestaurantAdapter(Context context, List<Restaurant> restaurantList) {
+
         this.context = context;
         this.restaurantList = restaurantList;
         this.inflater = LayoutInflater.from(context);

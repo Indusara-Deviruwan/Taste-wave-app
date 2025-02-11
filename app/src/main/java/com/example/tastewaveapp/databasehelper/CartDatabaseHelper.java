@@ -1,0 +1,118 @@
+package com.example.tastewaveapp.databasehelper;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.tastewaveapp.model.FoodCart;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CartDatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "cart.db";
+    private static final int DATABASE_VERSION = 1;
+
+    public static final String TABLE_CART = "cart";
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_PRICE = "price";
+    public static final String COLUMN_QUANTITY = "quantity";
+    public static final String COLUMN_IMAGE_URL = "imageUrl";
+
+    public CartDatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_CART_TABLE = "CREATE TABLE " + TABLE_CART + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_NAME + " TEXT, " +
+                COLUMN_DESCRIPTION + " TEXT, " +
+                COLUMN_PRICE + " REAL, " +
+                COLUMN_QUANTITY + " INTEGER, " +
+                COLUMN_IMAGE_URL + " TEXT)";
+        db.execSQL(CREATE_CART_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CART);
+        onCreate(db);
+    }
+
+    public void addToCart(FoodCart food) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, food.getName());
+        values.put(COLUMN_DESCRIPTION, food.getDescription());
+        values.put(COLUMN_PRICE, food.getPrice());
+        values.put(COLUMN_QUANTITY, food.getQuantity());
+        values.put(COLUMN_IMAGE_URL, food.getImageUrl());
+
+        db.insert(TABLE_CART, null, values);
+        db.close();
+    }
+
+    public List<FoodCart> getAllCartItems() {
+        List<FoodCart> cartItems = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to get all items in the cart
+        Cursor cursor = db.query(TABLE_CART,
+                new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_PRICE, COLUMN_QUANTITY, COLUMN_IMAGE_URL},
+                null, null, null, null, null);
+
+        // Check if cursor is valid and has data
+        if (cursor != null && cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex(COLUMN_ID);
+            int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
+            int descriptionIndex = cursor.getColumnIndex(COLUMN_DESCRIPTION);
+            int priceIndex = cursor.getColumnIndex(COLUMN_PRICE);
+            int quantityIndex = cursor.getColumnIndex(COLUMN_QUANTITY);
+            int imageUrlIndex = cursor.getColumnIndex(COLUMN_IMAGE_URL);
+
+            // Ensure none of the column indexes are -1
+            if (idIndex != -1 && nameIndex != -1 && descriptionIndex != -1 &&
+                    priceIndex != -1 && quantityIndex != -1 && imageUrlIndex != -1) {
+
+                do {
+                    int id = cursor.getInt(idIndex);
+                    String name = cursor.getString(nameIndex);
+                    String description = cursor.getString(descriptionIndex);
+                    double price = cursor.getDouble(priceIndex);
+                    int quantity = cursor.getInt(quantityIndex);
+                    String imageUrl = cursor.getString(imageUrlIndex);
+
+                    // Create a new FoodCart object and add it to the list
+                    FoodCart foodCartItem = new FoodCart(id, name, description, price, quantity, imageUrl);
+                    cartItems.add(foodCartItem);
+
+                } while (cursor.moveToNext());
+            } else {
+                // Log or handle the case where a column index is invalid
+                Log.e("CartDatabaseHelper", "Invalid column index in cursor.");
+            }
+        }
+
+        // Close the cursor and return the list
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        return cartItems;
+    }
+
+
+
+    public void clearCart() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_CART);
+        db.close();
+    }
+}

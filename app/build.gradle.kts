@@ -62,6 +62,10 @@ dependencies {
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.analytics)
 
+    //picasso
+    implementation(libs.picasso)
+
+
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
