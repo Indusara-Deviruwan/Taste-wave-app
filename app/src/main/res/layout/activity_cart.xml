@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.CartActivity">
-
-    <!-- App Bar with Material Toolbar
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        app:title="Your Cart"
-        app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/splash_2">
-    </com.google.android.material.appbar.MaterialToolbar> -->
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -25,26 +15,13 @@
         android:layout_height="wrap_content"
         android:background="@color/primary_color"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Cart"
-        app:titleTextColor="@android:color/white"/>
-
-    <!-- Lottie Animation at the Top -->
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@id/cart_items_list_view"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/cart_2" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="Cart"
+        app:titleTextColor="@android:color/white" />
 
-    <!-- Cart Items ListView -->
+    <!-- Cart Items ListView (More Space Allocated) -->
     <ListView
         android:id="@+id/cart_items_list_view"
         android:layout_width="0dp"
@@ -53,31 +30,30 @@
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/lottieAnimationView"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/promo_code_section" />
+        app:layout_constraintBottom_toTopOf="@id/promo_code_section" />
 
-    <!-- Promo Code Section -->
+    <!-- Reduced Promo Code Section -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/promo_code_section"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/total_price"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@id/total_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cart_items_list_view">
+        app:layout_constraintTop_toBottomOf="@id/cart_items_list_view">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp"
-            app:layout_constraintBottom_toTopOf="@id/total_price"
-            app:layout_constraintTop_toBottomOf="@id/cart_items_list_view">
+            android:padding="8dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
@@ -89,7 +65,7 @@
                     android:id="@+id/promo_code_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Promo Code" />
+                    android:hint="Promo Code" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -107,16 +83,30 @@
         android:id="@+id/total_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        android:padding="12dp"
         android:text="Total: $0.00"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/checkout_button"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/lottieAnimationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/promo_code_section" />
+
+    <!-- Lottie Animation (Remains Below Total Price) -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toTopOf="@id/checkout_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/total_price"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/cart_2" />
 
     <!-- Checkout Button -->
     <com.google.android.material.button.MaterialButton
@@ -129,10 +119,10 @@
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:cornerRadius="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_price" />
+        app:layout_constraintTop_toBottomOf="@id/lottieAnimationView" />
 
     <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

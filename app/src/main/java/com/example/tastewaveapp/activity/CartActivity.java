@@ -1,8 +1,8 @@
 package com.example.tastewaveapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,6 +11,7 @@ import com.example.tastewaveapp.adapter.CartAdapter;
 import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
 import com.example.tastewaveapp.model.FoodCart;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class CartActivity extends BaseActivity {
@@ -64,11 +65,17 @@ public class CartActivity extends BaseActivity {
 
     private void applyPromoCode() {
         // Logic for applying promo code (optional functionality)
-        // You can add your own logic for applying discounts here.
     }
 
     private void proceedToCheckout() {
-        // Logic for proceeding to checkout (e.g., navigating to another activity or updating database)
+        // Create an intent to navigate to PaymentActivity
+        Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
+
+        // Pass the cart items to the PaymentActivity
+        intent.putExtra("cartItems", (Serializable) cartItems);
+
+        // Start PaymentActivity
+        startActivity(intent);
     }
 
     @Override
@@ -88,7 +95,4 @@ public class CartActivity extends BaseActivity {
     protected int getSelectedMenuItemId() {
         return R.id.nav_cart;
     }
-
-
-
 }

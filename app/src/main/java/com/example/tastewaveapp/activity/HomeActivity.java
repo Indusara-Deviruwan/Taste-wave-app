@@ -172,7 +172,7 @@ public class HomeActivity extends BaseActivity {
         }
         if (item.getItemId() == R.id.action_notification) {
             Toast.makeText(this, "Notification Clicked", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, PaymentActivity.class)); // Navigate to LoginActivity
+            startActivity(new Intent(this, OffersActivity.class)); // Navigate to LoginActivity
             return true;
         }
         return super.onOptionsItemSelected(item);

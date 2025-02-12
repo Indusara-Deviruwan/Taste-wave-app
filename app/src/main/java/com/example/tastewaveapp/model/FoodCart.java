@@ -1,6 +1,8 @@
 package com.example.tastewaveapp.model;
 
-public class FoodCart {
+import java.io.Serializable;
+
+public class FoodCart implements Serializable {
     private int id;
     private String name;
     private String description;
@@ -86,4 +88,6 @@ public class FoodCart {
     public double getTotalPrice() {
         return this.price * this.quantity;
     }
+
+
 }
