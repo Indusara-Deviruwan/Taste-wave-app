@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tastewaveapp.R;
+import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
 import com.example.tastewaveapp.databasehelper.OrderDatabaseHelper;
 import com.example.tastewaveapp.model.FoodCart;
 import com.example.tastewaveapp.model.Order;
@@ -93,6 +94,10 @@ public class OrderConfirmationActivity extends AppCompatActivity {
         boolean isOrderInserted = orderDatabaseHelper.insertOrder(newOrder);
 
         if (isOrderInserted) {
+            // Clear cart items after successful order placement
+            CartDatabaseHelper cartDatabaseHelper = new CartDatabaseHelper(OrderConfirmationActivity.this);
+            cartDatabaseHelper.clearCart();
+
             Intent homeIntent = new Intent(OrderConfirmationActivity.this, OrderActivity.class);
             Toast.makeText(OrderConfirmationActivity.this, "Order Placed successfully", Toast.LENGTH_SHORT).show();
             startActivity(homeIntent);
@@ -101,4 +106,5 @@ public class OrderConfirmationActivity extends AppCompatActivity {
             Toast.makeText(OrderConfirmationActivity.this, "Order failed. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
