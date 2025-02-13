@@ -10,7 +10,7 @@ public class FoodCart implements Serializable {
     private int quantity;
     private String imageUrl;
 
-    // Constructor
+    // Constructor with all parameters
     public FoodCart(int id, String name, String description, double price, int quantity, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -22,6 +22,16 @@ public class FoodCart implements Serializable {
 
     // Empty Constructor
     public FoodCart() {}
+
+    // New constructor for name and quantity only
+    public FoodCart(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+        this.id = 0;  // Default value for id
+        this.description = "";  // Default value
+        this.price = 0.0;  // Default value
+        this.imageUrl = "";  // Default value
+    }
 
     // Getters and Setters
     public int getId() {
@@ -88,6 +98,4 @@ public class FoodCart implements Serializable {
     public double getTotalPrice() {
         return this.price * this.quantity;
     }
-
-
 }

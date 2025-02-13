@@ -2,69 +2,162 @@ package com.example.tastewaveapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tastewaveapp.R;
 import com.example.tastewaveapp.adapter.CartAdapter;
+import com.example.tastewaveapp.adapter.PaymentCartAdapter;
 import com.example.tastewaveapp.model.FoodCart;
 
 import java.util.List;
 
 public class PaymentActivity extends BaseActivity {
 
-    private ListView paymentMethodsListView;
-    private TextView selectedPaymentMethodTextView;
+    private ListView cartListView;
+    private PaymentCartAdapter paymentCartAdapter;
     private TextView totalAmountTextView;
-    private CartAdapter cartAdapter;
+    private TextView selectedPaymentMethodTextView;
+    private Button addPaymentMethodButton;
+    private Button proceedToConfirmationButton;
+    private Button addDeliveryDetailsButton;
+
+    private String selectedPaymentMethod = "None";
+    private double totalPrice;
+    private String deliveryAddress = "", paymentDetails;
+    private int userId;
     private List<FoodCart> cartItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_payment);
 
-        // Set padding for system bars (status and navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        setupToolbar("Payment");  // Set up toolbar
+        setupToolbar("Payment");
         setupBottomNavigation();
 
-        // Initialize UI components
-        paymentMethodsListView = findViewById(R.id.payment_methods_list_view);
-        selectedPaymentMethodTextView = findViewById(R.id.selected_payment_method);
+        cartListView = findViewById(R.id.payment_methods_list_view);
         totalAmountTextView = findViewById(R.id.total_amount);
+        selectedPaymentMethodTextView = findViewById(R.id.selected_payment_method);
+        addPaymentMethodButton = findViewById(R.id.payment_method_button);
+        proceedToConfirmationButton = findViewById(R.id.pay_now_button);
+        addDeliveryDetailsButton = findViewById(R.id.add_delivery_details_button);
 
-        // Retrieve the cart items passed from CartActivity
         Intent intent = getIntent();
         cartItems = (List<FoodCart>) intent.getSerializableExtra("cartItems");
+        totalPrice = intent.getDoubleExtra("totalPrice", 0.0);
+        userId = intent.getIntExtra("userId", -1);
 
-        // Set up adapter for ListView to display cart items
-        cartAdapter = new CartAdapter(this, cartItems);
-        paymentMethodsListView.setAdapter(cartAdapter);
+        paymentCartAdapter = new PaymentCartAdapter(this, cartItems);
+        cartListView.setAdapter(paymentCartAdapter);
 
-        // Calculate and display total price
         displayTotalPrice();
+
+        addPaymentMethodButton.setOnClickListener(v -> showAddPaymentMethodDialog());
+        proceedToConfirmationButton.setOnClickListener(v -> proceedToOrderConfirmation());
+        addDeliveryDetailsButton.setOnClickListener(v -> showAddDeliveryDetailsDialog());
     }
 
-    // Display total price based on cart items
     private void displayTotalPrice() {
-        double totalPrice = 0.0;
+        totalPrice = 0.0;
         for (FoodCart item : cartItems) {
-            totalPrice += item.getTotalPrice(); // Calculate total price
+            totalPrice += item.getTotalPrice();
         }
-        totalAmountTextView.setText("Total Amount: $" + String.format("%.2f", totalPrice)); // Display total price
+        totalAmountTextView.setText("Total Amount: $" + String.format("%.2f", totalPrice));
+        selectedPaymentMethodTextView.setText("Selected Payment Method: " + selectedPaymentMethod);
+    }
+
+    private void showAddPaymentMethodDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_payment_method, null);
+
+        // Define the EditTexts for payment details
+        EditText cardNumberEditText = dialogView.findViewById(R.id.payment_method_number);
+        EditText expiryDateEditText = dialogView.findViewById(R.id.payment_method_expiry);
+        EditText cvvEditText = dialogView.findViewById(R.id.payment_method_cvv);
+        EditText paymentMethodEditText = dialogView.findViewById(R.id.payment_method_name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
+        builder.setView(dialogView)
+                .setTitle("Add Payment Method")
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String paymentMethod = paymentMethodEditText.getText().toString().trim(); ;
+                    String cardNumber = cardNumberEditText.getText().toString().trim();
+                    String expiryDate = expiryDateEditText.getText().toString().trim();
+                    String cvv = cvvEditText.getText().toString().trim();
+
+                    // Validate inputs
+                    if (paymentMethod.isEmpty() ||cardNumber.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty()) {
+                        Toast.makeText(PaymentActivity.this, "Please fill all payment details", Toast.LENGTH_SHORT).show();
+                    } else {
+                        paymentDetails = "paymentMethod : " + paymentMethod + "\ncardNumber : " + cardNumber + "\nexpiryDate : " + cvv + "\ncvv : ";
+                        Toast.makeText(this, "Delivery details saved", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.create().show();
+    }
+
+
+    private void showAddDeliveryDetailsDialog() {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_delivery_details, null);
+
+        EditText cityEditText = dialogView.findViewById(R.id.city_edit_text);
+        EditText postalCodeEditText = dialogView.findViewById(R.id.postal_code_edit_text);
+        EditText residenceAddressEditText = dialogView.findViewById(R.id.residence_address_edit_text);
+        Spinner pickingTypeSpinner = dialogView.findViewById(R.id.picking_type_spinner);
+        Spinner priorityTypeSpinner = dialogView.findViewById(R.id.priority_type_spinner);
+        EditText deliveryTimeEditText = dialogView.findViewById(R.id.delivery_time_edit_text);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
+        builder.setView(dialogView)
+                .setTitle("Add Delivery Details")
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String city = cityEditText.getText().toString().trim();
+                    String postalCode = postalCodeEditText.getText().toString().trim();
+                    String residenceAddress = residenceAddressEditText.getText().toString().trim();
+                    String pickingType = pickingTypeSpinner.getSelectedItem().toString();
+                    String priorityType = priorityTypeSpinner.getSelectedItem().toString();
+                    String deliveryTime = deliveryTimeEditText.getText().toString().trim();
+
+                    if (city.isEmpty() || postalCode.isEmpty() || residenceAddress.isEmpty() || deliveryTime.isEmpty()) {
+                        Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
+                    } else {
+                        deliveryAddress = "City : " + city + "\nPostal Code : " + postalCode + "\nResidence Address : " + residenceAddress + "\nPicking Type : " + pickingType + "\nPriority Type : " + priorityType + "\nDelivery Time : " + deliveryTime;
+                        Toast.makeText(this, "Delivery details saved", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        builder.create().show();
+    }
+
+    private void proceedToOrderConfirmation() {
+        if (deliveryAddress.isEmpty()) {
+            Toast.makeText(this, "Please add delivery details", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent confirmationIntent = new Intent(PaymentActivity.this, OrderConfirmationActivity.class);
+        confirmationIntent.putExtra("cartItems", (java.io.Serializable) cartItems);
+        confirmationIntent.putExtra("totalPrice", totalPrice);
+        confirmationIntent.putExtra("deliveryAddress", deliveryAddress);
+        confirmationIntent.putExtra("userId", userId);
+        confirmationIntent.putExtra("paymentDetails", paymentDetails);
+        //confirmationIntent.putExtra("paymentMethod", selectedPaymentMethod);
+        startActivity(confirmationIntent);
+        finish();
     }
 
     @Override
@@ -74,6 +167,6 @@ public class PaymentActivity extends BaseActivity {
 
     @Override
     protected int getSelectedMenuItemId() {
-        return 0;
+        return -1;
     }
 }

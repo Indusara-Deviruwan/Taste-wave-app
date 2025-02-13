@@ -20,5 +20,26 @@
         <item>Sort by Price</item>
     </string-array>
 
+    <string-array name="payment_method_types">
+        <item>Credit Card</item>
+        <item>Debit Card</item>
+        <item>PayPal</item>
+        <item>Google Pay</item>
+    </string-array>
+
+    <!-- Order Picking Types -->
+    <string-array name="picking_types">
+        <item>At My Door</item>
+        <item>Pickup Point</item>
+        <item>Hand Over in Person</item>
+    </string-array>
+
+    <!-- Order Priority Types -->
+    <string-array name="priority_types">
+        <item>Standard</item>
+        <item>Express</item>
+        <item>Urgent</item>
+    </string-array>
+
 </resources>
 

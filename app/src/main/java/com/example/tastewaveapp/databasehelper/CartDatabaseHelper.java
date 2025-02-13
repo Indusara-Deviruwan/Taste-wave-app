@@ -48,14 +48,30 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
 
     public void addToCart(FoodCart food) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, food.getName());
-        values.put(COLUMN_DESCRIPTION, food.getDescription());
-        values.put(COLUMN_PRICE, food.getPrice());
-        values.put(COLUMN_QUANTITY, food.getQuantity());
-        values.put(COLUMN_IMAGE_URL, food.getImageUrl());
 
-        db.insert(TABLE_CART, null, values);
+        // Check if item already exists in the cart
+        Cursor cursor = db.query(TABLE_CART, new String[]{COLUMN_ID, COLUMN_QUANTITY},
+                COLUMN_NAME + "=?", new String[]{food.getName()}, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Item already exists, update quantity
+            int existingId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+            int existingQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY));
+            cursor.close();
+
+            updateCartItemQuantity(existingId, existingQuantity + food.getQuantity());
+        } else {
+            // Insert new item
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_NAME, food.getName());
+            values.put(COLUMN_DESCRIPTION, food.getDescription());
+            values.put(COLUMN_PRICE, food.getPrice());
+            values.put(COLUMN_QUANTITY, food.getQuantity());
+            values.put(COLUMN_IMAGE_URL, food.getImageUrl());
+
+            db.insert(TABLE_CART, null, values);
+        }
+
         db.close();
     }
 
@@ -63,44 +79,23 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
         List<FoodCart> cartItems = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Query to get all items in the cart
         Cursor cursor = db.query(TABLE_CART,
                 new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_PRICE, COLUMN_QUANTITY, COLUMN_IMAGE_URL},
                 null, null, null, null, null);
 
-        // Check if cursor is valid and has data
         if (cursor != null && cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(COLUMN_ID);
-            int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
-            int descriptionIndex = cursor.getColumnIndex(COLUMN_DESCRIPTION);
-            int priceIndex = cursor.getColumnIndex(COLUMN_PRICE);
-            int quantityIndex = cursor.getColumnIndex(COLUMN_QUANTITY);
-            int imageUrlIndex = cursor.getColumnIndex(COLUMN_IMAGE_URL);
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY));
+                String imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL));
 
-            // Ensure none of the column indexes are -1
-            if (idIndex != -1 && nameIndex != -1 && descriptionIndex != -1 &&
-                    priceIndex != -1 && quantityIndex != -1 && imageUrlIndex != -1) {
-
-                do {
-                    int id = cursor.getInt(idIndex);
-                    String name = cursor.getString(nameIndex);
-                    String description = cursor.getString(descriptionIndex);
-                    double price = cursor.getDouble(priceIndex);
-                    int quantity = cursor.getInt(quantityIndex);
-                    String imageUrl = cursor.getString(imageUrlIndex);
-
-                    // Create a new FoodCart object and add it to the list
-                    FoodCart foodCartItem = new FoodCart(id, name, description, price, quantity, imageUrl);
-                    cartItems.add(foodCartItem);
-
-                } while (cursor.moveToNext());
-            } else {
-                // Log or handle the case where a column index is invalid
-                Log.e("CartDatabaseHelper", "Invalid column index in cursor.");
-            }
+                cartItems.add(new FoodCart(id, name, description, price, quantity, imageUrl));
+            } while (cursor.moveToNext());
         }
 
-        // Close the cursor and return the list
         if (cursor != null) {
             cursor.close();
         }
@@ -108,11 +103,43 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
         return cartItems;
     }
 
+    public void removeItemFromCart(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CART, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 
+    public void updateCartItemQuantity(int id, int newQuantity) {
+        if (newQuantity <= 0) {
+            removeItemFromCart(id);
+            return;
+        }
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_QUANTITY, newQuantity);
+
+        db.update(TABLE_CART, values, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    public double getCartTotalPrice() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        double totalPrice = 0;
+
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_PRICE + " * " + COLUMN_QUANTITY + ") FROM " + TABLE_CART, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            totalPrice = cursor.getDouble(0);
+            cursor.close();
+        }
+        db.close();
+        return totalPrice;
+    }
 
     public void clearCart() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CART);
+        db.execSQL("VACUUM");  // Resets the database size and reclaims unused space
         db.close();
     }
 }
