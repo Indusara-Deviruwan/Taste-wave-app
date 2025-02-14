@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="12dp"
+    android:radius="16dp"
     android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@android:color/white">
+        android:padding="20dp"
+        android:background="@color/white">
 
         <!-- Order ID and Status -->
         <LinearLayout
@@ -26,17 +27,19 @@
                 android:layout_weight="1"
                 android:text="Order ID: 123"
                 android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="16sp"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:drawableStart="@android:drawable/ic_menu_info_details"/>
 
             <TextView
                 android:id="@+id/tv_order_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status: Pending"
-                android:textColor="#FF9800"
+                android:textColor="#FFD700"
                 android:textStyle="bold"
-                android:textSize="14sp"/>
+                android:textSize="16sp"
+                android:drawableStart="@android:drawable/ic_menu_recent_history"/>
         </LinearLayout>
 
         <!-- Total Price -->
@@ -45,9 +48,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total: $25.50"
-            android:textSize="16sp"
-            android:textColor="#000"
-            android:layout_marginTop="8dp"/>
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:drawableStart="@android:drawable/ic_menu_compass"/>
 
         <!-- Order Date -->
         <TextView
@@ -55,9 +60,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date: 2024-02-13"
-            android:textSize="14sp"
-            android:textColor="#666"
-            android:layout_marginTop="4dp"/>
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="6dp"
+            android:drawableStart="@android:drawable/ic_menu_today"/>
 
         <!-- Delivery Address -->
         <TextView
@@ -65,9 +71,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Address: 123 Main Street, City"
-            android:textSize="14sp"
-            android:textColor="#444"
-            android:layout_marginTop="6dp"/>
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="6dp"
+            android:drawableStart="@android:drawable/ic_menu_mapmode"/>
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

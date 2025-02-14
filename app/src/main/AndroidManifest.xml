@@ -20,6 +20,9 @@
         android:theme="@style/Theme.TasteWaveApp"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OrderConfirmationActivity"
             android:exported="false" />
         <activity

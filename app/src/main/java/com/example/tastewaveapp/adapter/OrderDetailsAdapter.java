@@ -14,17 +14,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CartAdapter extends android.widget.BaseAdapter {
+public class OrderDetailsAdapter extends android.widget.BaseAdapter {
     private Context context;
     private List<FoodCart> cartItems;
     private LayoutInflater inflater;
-    private CartItemListener listener;
+    private FoodItemListener  listener;
 
-    public interface CartItemListener {
+    public interface FoodItemListener {
         void removeItemFromCart(int id);
     }
 
-    public CartAdapter(Context context, List<FoodCart> cartItems, CartItemListener listener) {
+    public OrderDetailsAdapter(Context context, List<FoodCart> cartItems, FoodItemListener  listener) {
         this.context = context;
         this.cartItems = cartItems;
         this.listener = listener;
@@ -49,7 +49,7 @@ public class CartAdapter extends android.widget.BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_cart, parent, false);
+            convertView = inflater.inflate(R.layout.order_item, parent, false);
         }
 
         FoodCart foodCart = cartItems.get(position);
@@ -68,8 +68,8 @@ public class CartAdapter extends android.widget.BaseAdapter {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Picasso.get()
                     .load(imageUrl)
-                    .placeholder(R.drawable.spalsh_1) // Placeholder while loading
-                    .error(R.drawable.splash_3) // Error image if URL fails
+                    .placeholder(R.drawable.spalsh_1)
+                    .error(R.drawable.splash_3)
                     .into(itemImageView);
         } else {
             itemImageView.setImageResource(R.drawable.splash_2);

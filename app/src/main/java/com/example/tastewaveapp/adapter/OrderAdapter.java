@@ -43,12 +43,14 @@ public class OrderAdapter extends ArrayAdapter<Order> {
         TextView tvOrderDate = convertView.findViewById(R.id.tv_order_date);
         TextView tvDeliveryAddress = convertView.findViewById(R.id.tv_delivery_address);
 
+
         // Populate data
         tvOrderId.setText("Order ID: " + order.getOrderId());
         tvOrderStatus.setText("Status: " + order.getOrderStatus());
         tvTotalPrice.setText("Total: $" + String.format("%.2f", order.getTotalPrice()));
         tvOrderDate.setText("Date: " + order.getOrderDate());
         tvDeliveryAddress.setText("Address: " + order.getDeliveryAddress());
+
 
         // Change text color based on order status
         String status = order.getOrderStatus();

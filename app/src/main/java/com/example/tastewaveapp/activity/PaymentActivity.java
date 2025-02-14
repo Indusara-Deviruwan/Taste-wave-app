@@ -12,11 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tastewaveapp.R;
-import com.example.tastewaveapp.adapter.CartAdapter;
 import com.example.tastewaveapp.adapter.PaymentCartAdapter;
+import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
 import com.example.tastewaveapp.model.FoodCart;
 
 import java.util.List;
@@ -52,10 +51,10 @@ public class PaymentActivity extends BaseActivity {
         proceedToConfirmationButton = findViewById(R.id.pay_now_button);
         addDeliveryDetailsButton = findViewById(R.id.add_delivery_details_button);
 
-        Intent intent = getIntent();
-        cartItems = (List<FoodCart>) intent.getSerializableExtra("cartItems");
-        totalPrice = intent.getDoubleExtra("totalPrice", 0.0);
-        userId = intent.getIntExtra("userId", -1);
+        // Retrieve cart items from the database
+        CartDatabaseHelper dbHelper = new CartDatabaseHelper(this);
+        cartItems = dbHelper.getAllCartItems();
+        totalPrice = dbHelper.getCartTotalPrice();
 
         paymentCartAdapter = new PaymentCartAdapter(this, cartItems);
         cartListView.setAdapter(paymentCartAdapter);
@@ -68,10 +67,6 @@ public class PaymentActivity extends BaseActivity {
     }
 
     private void displayTotalPrice() {
-        totalPrice = 0.0;
-        for (FoodCart item : cartItems) {
-            totalPrice += item.getTotalPrice();
-        }
         totalAmountTextView.setText("Total Amount: $" + String.format("%.2f", totalPrice));
         selectedPaymentMethodTextView.setText("Selected Payment Method: " + selectedPaymentMethod);
     }
@@ -80,7 +75,6 @@ public class PaymentActivity extends BaseActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_payment_method, null);
 
-        // Define the EditTexts for payment details
         EditText cardNumberEditText = dialogView.findViewById(R.id.payment_method_number);
         EditText expiryDateEditText = dialogView.findViewById(R.id.payment_method_expiry);
         EditText cvvEditText = dialogView.findViewById(R.id.payment_method_cvv);
@@ -90,24 +84,22 @@ public class PaymentActivity extends BaseActivity {
         builder.setView(dialogView)
                 .setTitle("Add Payment Method")
                 .setPositiveButton("Save", (dialog, which) -> {
-                    String paymentMethod = paymentMethodEditText.getText().toString().trim(); ;
+                    String paymentMethod = paymentMethodEditText.getText().toString().trim();
                     String cardNumber = cardNumberEditText.getText().toString().trim();
                     String expiryDate = expiryDateEditText.getText().toString().trim();
                     String cvv = cvvEditText.getText().toString().trim();
 
-                    // Validate inputs
-                    if (paymentMethod.isEmpty() ||cardNumber.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty()) {
+                    if (paymentMethod.isEmpty() || cardNumber.isEmpty() || expiryDate.isEmpty() || cvv.isEmpty()) {
                         Toast.makeText(PaymentActivity.this, "Please fill all payment details", Toast.LENGTH_SHORT).show();
                     } else {
-                        paymentDetails = "paymentMethod : " + paymentMethod + "\ncardNumber : " + cardNumber + "\nexpiryDate : " + cvv + "\ncvv : ";
-                        Toast.makeText(this, "Delivery details saved", Toast.LENGTH_SHORT).show();
+                        paymentDetails = "Payment Method: " + paymentMethod + "\nCard Number: " + cardNumber + "\nExpiry Date: " + expiryDate + "\nCVV: " + cvv;
+                        Toast.makeText(this, "Payment details saved", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         builder.create().show();
     }
-
 
     private void showAddDeliveryDetailsDialog() {
         LayoutInflater inflater = getLayoutInflater();
@@ -134,7 +126,7 @@ public class PaymentActivity extends BaseActivity {
                     if (city.isEmpty() || postalCode.isEmpty() || residenceAddress.isEmpty() || deliveryTime.isEmpty()) {
                         Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show();
                     } else {
-                        deliveryAddress = "City : " + city + "\nPostal Code : " + postalCode + "\nResidence Address : " + residenceAddress + "\nPicking Type : " + pickingType + "\nPriority Type : " + priorityType + "\nDelivery Time : " + deliveryTime;
+                        deliveryAddress = "City: " + city + "\nPostal Code: " + postalCode + "\nAddress: " + residenceAddress + "\nPicking Type: " + pickingType + "\nPriority Type: " + priorityType + "\nDelivery Time: " + deliveryTime;
                         Toast.makeText(this, "Delivery details saved", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -155,7 +147,6 @@ public class PaymentActivity extends BaseActivity {
         confirmationIntent.putExtra("deliveryAddress", deliveryAddress);
         confirmationIntent.putExtra("userId", userId);
         confirmationIntent.putExtra("paymentDetails", paymentDetails);
-        //confirmationIntent.putExtra("paymentMethod", selectedPaymentMethod);
         startActivity(confirmationIntent);
         finish();
     }

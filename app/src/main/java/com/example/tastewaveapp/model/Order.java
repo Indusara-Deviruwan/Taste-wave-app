@@ -5,11 +5,26 @@ import java.util.List;
 public class Order {
     private int orderId;
     private int userId;
+    private int restaurantId;
+    private String restaurantName;
     private List<FoodCart> foodItems;
     private double totalPrice;
     private String orderStatus;
     private String orderDate;
     private String deliveryAddress;
+
+    // Constructor
+    public Order(int orderId, int userId, int restaurantId, String restaurantName, List<FoodCart> foodItems, double totalPrice, String orderStatus, String orderDate, String deliveryAddress) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+        this.foodItems = foodItems;
+        this.totalPrice = totalPrice;
+        this.orderStatus = orderStatus;
+        this.orderDate = orderDate;
+        this.deliveryAddress = deliveryAddress;
+    }
 
     // Constructor
     public Order(int orderId, int userId, List<FoodCart> foodItems, double totalPrice, String orderStatus, String orderDate, String deliveryAddress) {
@@ -40,6 +55,22 @@ public class Order {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(int restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
     public List<FoodCart> getFoodItems() {

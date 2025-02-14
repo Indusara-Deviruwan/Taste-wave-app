@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CartDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cart.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 7;
 
     public static final String TABLE_CART = "cart";
     public static final String COLUMN_ID = "id";
@@ -23,6 +23,8 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_QUANTITY = "quantity";
     public static final String COLUMN_IMAGE_URL = "imageUrl";
+    public static final String COLUMN_RESTAURANT_ID = "restaurantId";
+    public static final String COLUMN_RESTAURANT_NAME = "restaurantName";
 
     public CartDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,7 +38,9 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DESCRIPTION + " TEXT, " +
                 COLUMN_PRICE + " REAL, " +
                 COLUMN_QUANTITY + " INTEGER, " +
-                COLUMN_IMAGE_URL + " TEXT)";
+                COLUMN_IMAGE_URL + " TEXT, " +
+                COLUMN_RESTAURANT_ID + " TEXT, " +
+                COLUMN_RESTAURANT_NAME + " TEXT)";
         db.execSQL(CREATE_CART_TABLE);
     }
 
@@ -49,25 +53,25 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
     public void addToCart(FoodCart food) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Check if item already exists in the cart
         Cursor cursor = db.query(TABLE_CART, new String[]{COLUMN_ID, COLUMN_QUANTITY},
-                COLUMN_NAME + "=?", new String[]{food.getName()}, null, null, null);
+                COLUMN_NAME + "=? AND " + COLUMN_RESTAURANT_ID + "=?",
+                new String[]{food.getName(), food.getRestaurantId()}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            // Item already exists, update quantity
             int existingId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
             int existingQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY));
             cursor.close();
 
             updateCartItemQuantity(existingId, existingQuantity + food.getQuantity());
         } else {
-            // Insert new item
             ContentValues values = new ContentValues();
             values.put(COLUMN_NAME, food.getName());
             values.put(COLUMN_DESCRIPTION, food.getDescription());
             values.put(COLUMN_PRICE, food.getPrice());
             values.put(COLUMN_QUANTITY, food.getQuantity());
             values.put(COLUMN_IMAGE_URL, food.getImageUrl());
+            values.put(COLUMN_RESTAURANT_ID, food.getRestaurantId());
+            values.put(COLUMN_RESTAURANT_NAME, food.getRestaurantName());
 
             db.insert(TABLE_CART, null, values);
         }
@@ -80,7 +84,7 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_CART,
-                new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_PRICE, COLUMN_QUANTITY, COLUMN_IMAGE_URL},
+                new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_DESCRIPTION, COLUMN_PRICE, COLUMN_QUANTITY, COLUMN_IMAGE_URL, COLUMN_RESTAURANT_ID, COLUMN_RESTAURANT_NAME},
                 null, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -91,8 +95,10 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
                 double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PRICE));
                 int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_QUANTITY));
                 String imageUrl = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL));
+                String restaurantId = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_ID));
+                String restaurantName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RESTAURANT_NAME));
 
-                cartItems.add(new FoodCart(id, name, description, price, quantity, imageUrl));
+                cartItems.add(new FoodCart(id, name, description, price, quantity, imageUrl, restaurantId, restaurantName));
             } while (cursor.moveToNext());
         }
 
@@ -139,7 +145,7 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
     public void clearCart() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CART);
-        db.execSQL("VACUUM");  // Resets the database size and reclaims unused space
+        db.execSQL("VACUUM");
         db.close();
     }
 }

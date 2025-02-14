@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "orders.db";
-    private static final int DATABASE_VERSION = 2;  // Increment version number for the new schema
+    private static final int DATABASE_VERSION = 7;
 
     public static final String TABLE_ORDERS = "orders";
     public static final String COLUMN_ID = "order_id";
@@ -26,12 +26,13 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ORDER_DATE = "order_date";
     public static final String COLUMN_DELIVERY_ADDRESS = "delivery_address";
 
-    // Additional table for food items
     public static final String TABLE_FOOD_ITEMS = "food_items";
     public static final String COLUMN_FOOD_ITEM_ID = "food_item_id";
     public static final String COLUMN_ORDER_ID_FOOD = "order_id";
     public static final String COLUMN_FOOD_NAME = "food_name";
     public static final String COLUMN_FOOD_QUANTITY = "food_quantity";
+    public static final String COLUMN_FOOD_RESTAURANT_ID = "restaurant_id";
+    public static final String COLUMN_FOOD_RESTAURANT_NAME = "restaurant_name";
 
     public OrderDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,6 +53,8 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_ORDER_ID_FOOD + " INTEGER, " +
                 COLUMN_FOOD_NAME + " TEXT, " +
                 COLUMN_FOOD_QUANTITY + " INTEGER, " +
+                COLUMN_FOOD_RESTAURANT_ID + " INTEGER, " +
+                COLUMN_FOOD_RESTAURANT_NAME + " TEXT, " +
                 "FOREIGN KEY(" + COLUMN_ORDER_ID_FOOD + ") REFERENCES " + TABLE_ORDERS + "(" + COLUMN_ID + "))";
 
         db.execSQL(CREATE_ORDERS_TABLE);
@@ -80,18 +83,23 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
 
         if (result == -1) {
             db.close();
-            return false; // Order insertion failed
+            return false;
         }
 
         // Insert each food item associated with the order
-        long orderId = result; // The generated orderId from the insert
+        long orderId = result;
         for (FoodCart foodItem : order.getFoodItems()) {
             ContentValues foodItemValues = new ContentValues();
             foodItemValues.put(COLUMN_ORDER_ID_FOOD, orderId);
             foodItemValues.put(COLUMN_FOOD_NAME, foodItem.getName());
             foodItemValues.put(COLUMN_FOOD_QUANTITY, foodItem.getQuantity());
+            foodItemValues.put(COLUMN_FOOD_RESTAURANT_ID, foodItem.getRestaurantId());
+            foodItemValues.put(COLUMN_FOOD_RESTAURANT_NAME, foodItem.getRestaurantName());
 
-            db.insert(TABLE_FOOD_ITEMS, null, foodItemValues);
+            long foodResult = db.insert(TABLE_FOOD_ITEMS, null, foodItemValues);
+            if (foodResult == -1) {
+                Log.e("OrderDatabaseHelper", "Failed to insert food item: " + foodItem.getName());
+            }
         }
 
         db.close();
@@ -104,59 +112,32 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(orderId)}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            // Ensure the columns exist
-            int userIdIndex = cursor.getColumnIndex(COLUMN_USER_ID);
-            int totalPriceIndex = cursor.getColumnIndex(COLUMN_TOTAL_PRICE);
-            int statusIndex = cursor.getColumnIndex(COLUMN_STATUS);
-            int orderDateIndex = cursor.getColumnIndex(COLUMN_ORDER_DATE);
-            int deliveryAddressIndex = cursor.getColumnIndex(COLUMN_DELIVERY_ADDRESS);
+            int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
+            double totalPrice = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_TOTAL_PRICE));
+            String status = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STATUS));
+            String orderDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ORDER_DATE));
+            String deliveryAddress = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DELIVERY_ADDRESS));
 
-            if (userIdIndex == -1 || totalPriceIndex == -1 || statusIndex == -1 || orderDateIndex == -1 || deliveryAddressIndex == -1) {
-                Log.e("OrderDatabaseHelper", "Missing columns in orders table.");
-                cursor.close();
-                return null; // Return null if any required column is missing
-            }
-
-            // Retrieve order details
-            int userId = cursor.getInt(userIdIndex);
-            double totalPrice = cursor.getDouble(totalPriceIndex);
-            String status = cursor.getString(statusIndex);
-            String orderDate = cursor.getString(orderDateIndex);
-            String deliveryAddress = cursor.getString(deliveryAddressIndex);
-
-            // Retrieve food items for this order
             List<FoodCart> foodItems = new ArrayList<>();
             Cursor foodCursor = db.query(TABLE_FOOD_ITEMS, null, COLUMN_ORDER_ID_FOOD + " = ?",
                     new String[]{String.valueOf(orderId)}, null, null, null);
 
             if (foodCursor != null) {
-                // Log food cursor row count for debugging
-                Log.d("Food Cursor Row Count", String.valueOf(foodCursor.getCount()));
-
                 while (foodCursor.moveToNext()) {
-                    int foodNameIndex = foodCursor.getColumnIndex(COLUMN_FOOD_NAME);
-                    int foodQuantityIndex = foodCursor.getColumnIndex(COLUMN_FOOD_QUANTITY);
-
-                    if (foodNameIndex == -1 || foodQuantityIndex == -1) {
-                        Log.e("Food Cursor Error", "Missing columns in food_items table.");
-                        break; // Stop processing if the columns are not found
-                    }
-
-                    String foodName = foodCursor.getString(foodNameIndex);
-                    int foodQuantity = foodCursor.getInt(foodQuantityIndex);
-                    foodItems.add(new FoodCart(foodName, foodQuantity));
+                    String foodName = foodCursor.getString(foodCursor.getColumnIndexOrThrow(COLUMN_FOOD_NAME));
+                    int foodQuantity = foodCursor.getInt(foodCursor.getColumnIndexOrThrow(COLUMN_FOOD_QUANTITY));
+                    int foodRestaurantId = foodCursor.getInt(foodCursor.getColumnIndexOrThrow(COLUMN_FOOD_RESTAURANT_ID));
+                    String foodRestaurantName = foodCursor.getString(foodCursor.getColumnIndexOrThrow(COLUMN_FOOD_RESTAURANT_NAME));
+                    foodItems.add(new FoodCart(foodName, foodQuantity, foodRestaurantId, foodRestaurantName));
                 }
                 foodCursor.close();
             }
 
-            // Close the order cursor
             cursor.close();
-
-            // Return the populated Order object
             return new Order(orderId, userId, foodItems, totalPrice, status, orderDate, deliveryAddress);
         }
 
-        cursor.close();
-        return null;  // Return null if order is not found
+        if (cursor != null) cursor.close();
+        return null;
     }
 }

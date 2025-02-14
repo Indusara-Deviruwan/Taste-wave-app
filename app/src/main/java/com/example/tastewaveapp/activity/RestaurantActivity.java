@@ -73,7 +73,7 @@ public class RestaurantActivity extends BaseActivity {
         // Initialize list and adapter
         foodList = new ArrayList<>();
         foodNames = new ArrayList<>();
-        foodAdapter = new FoodAdapter(this,foodList);
+        foodAdapter = new FoodAdapter(this,foodList,restaurantId,restaurantName);
         foodListView.setAdapter(foodAdapter);
 
         // Load food items

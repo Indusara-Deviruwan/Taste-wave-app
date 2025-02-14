@@ -31,11 +31,15 @@ public class FoodAdapter extends BaseAdapter {
     private final Context context;
     private final List<Food> foodList;
     private final LayoutInflater inflater;
+    private final String restaurantId;
+    private final String restaurantName;
 
-    public FoodAdapter(Context context, List<Food> foodList) {
+    public FoodAdapter(Context context, List<Food> foodList, String restaurantId , String restaurantName) {
         this.context = context;
         this.foodList = foodList;
         this.inflater = LayoutInflater.from(context);
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class FoodAdapter extends BaseAdapter {
             holder.decreaseButton = convertView.findViewById(R.id.btn_decrease);
             holder.cartButton = convertView.findViewById(R.id.buttonAddToCart);
             holder.quantityTextView = convertView.findViewById(R.id.tv_quantity);
-            holder.quantity = 0; // Default quantity is 1
+            holder.quantity = 0; // Default quantity is 0
 
             convertView.setTag(holder);
         } else {
@@ -86,7 +90,7 @@ public class FoodAdapter extends BaseAdapter {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         Log.e("GlideError", "Failed to load image: ", e);
-                        return false; // Allow Glide to handle the error
+                        return false;
                     }
 
                     @Override
@@ -94,11 +98,11 @@ public class FoodAdapter extends BaseAdapter {
                         return false;
                     }
                 })
-                .placeholder(R.drawable.start) // Placeholder while loading
-                .error(R.drawable.splash_4) // Error image if loading fails
+                .placeholder(R.drawable.start)
+                .error(R.drawable.splash_4)
                 .into(holder.imageView);
 
-        // Set name and description
+        // Set name, description, and price
         holder.nameTextView.setText(food.getName());
         holder.descriptionTextView.setText(food.getDescription());
         holder.priceTextView.setText(food.getPrice());
@@ -114,7 +118,7 @@ public class FoodAdapter extends BaseAdapter {
 
         // Handle decrease button click
         holder.decreaseButton.setOnClickListener(v -> {
-            if (holder.quantity > 0) { // Prevent quantity from going below 1
+            if (holder.quantity > 0) {
                 holder.quantity--;
                 holder.quantityTextView.setText(String.valueOf(holder.quantity));
             }
@@ -133,19 +137,18 @@ public class FoodAdapter extends BaseAdapter {
                 FoodCart foodCart = new FoodCart();
                 foodCart.setName(food.getName());
                 foodCart.setDescription(food.getDescription());
+                foodCart.setRestaurantId(restaurantId);
+                foodCart.setRestaurantName(restaurantName);
 
                 String priceString = food.getPrice();
-                // Remove the dollar sign and trim whitespace
                 String cleanPrice = priceString.replace("$", "").trim();
-                // Convert to double
                 double price = Double.parseDouble(cleanPrice);
-                // Output: 50.00
 
                 foodCart.setPrice(price);
                 foodCart.setQuantity(holder.quantity);
                 foodCart.setImageUrl(food.getImageResId());
 
-                dbHelper.addToCart(foodCart); // Add item to SQLite database
+                dbHelper.addToCart(foodCart);
                 dbHelper.close();
 
                 Toast.makeText(context, "Added " + holder.quantity + " " + food.getName() + " to cart", Toast.LENGTH_SHORT).show();
@@ -153,7 +156,6 @@ public class FoodAdapter extends BaseAdapter {
                 Toast.makeText(context, "Please select at least one item", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         return convertView;
     }
@@ -165,6 +167,6 @@ public class FoodAdapter extends BaseAdapter {
         TextView priceTextView;
         TextView quantityTextView;
         ImageButton favoriteButton, increaseButton, decreaseButton, cartButton;
-        int quantity; // Store quantity per item
+        int quantity;
     }
 }
