@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "orders.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
 
     public static final String TABLE_ORDERS = "orders";
     public static final String COLUMN_ID = "order_id";

@@ -83,6 +83,9 @@ public class RestaurantActivity extends BaseActivity {
         foodListView.setOnItemClickListener((parent, view, position, id) -> {
             Food selectedFood = foodList.get(position);
             Intent intent = new Intent(RestaurantActivity.this, FoodActivity.class);
+            intent.putExtra("restaurant _id",  restaurantId);
+            intent.putExtra("restaurant _name", restaurantName);
+            intent.putExtra("food_id", selectedFood.getId());
             intent.putExtra("food_name", selectedFood.getName());
             intent.putExtra("food_description", selectedFood.getDescription());
             intent.putExtra("food_image", selectedFood.getImageResId());

@@ -135,6 +135,7 @@ public class FoodAdapter extends BaseAdapter {
                 CartDatabaseHelper dbHelper = new CartDatabaseHelper(context);
 
                 FoodCart foodCart = new FoodCart();
+
                 foodCart.setName(food.getName());
                 foodCart.setDescription(food.getDescription());
                 foodCart.setRestaurantId(restaurantId);

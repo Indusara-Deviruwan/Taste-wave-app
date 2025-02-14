@@ -19,7 +19,8 @@ public class FoodActivity extends BaseActivity {
     private TextView quantityTextView;
     private int quantity = 0;
     private String foodPrice;
-    private String foodName, foodDescription, foodImageResId;
+    private String restaurantId,restaurantName;
+    private String foodId,foodName, foodDescription, foodImageResId;
     private CartDatabaseHelper dbHelper;
 
     @Override
@@ -27,9 +28,17 @@ public class FoodActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
 
+        // Setup Bottom Navigation
+        setupBottomNavigation();
+        setupToolbar("Food");
+
         dbHelper = new CartDatabaseHelper(this);
 
         // Get food details from intent
+        restaurantId = getIntent().getStringExtra("restaurant_id");
+        restaurantName = getIntent().getStringExtra("restaurant_name");
+
+        foodId = getIntent().getStringExtra("food_id");
         foodName = getIntent().getStringExtra("food_name");
         foodDescription = getIntent().getStringExtra("food_description");
         foodImageResId = getIntent().getStringExtra("food_image");
@@ -79,8 +88,14 @@ public class FoodActivity extends BaseActivity {
         if (quantity > 0) {
             // Create FoodCart object to add to the database
             FoodCart foodCartItem = new FoodCart();
+
+            foodCartItem.setRestaurantId(restaurantId);
+            foodCartItem.setRestaurantName(restaurantName);
+            //foodCartItem.setId(foodId);
             foodCartItem.setName(foodName);
             foodCartItem.setDescription(foodDescription);
+            foodCartItem.setQuantity(quantity);
+            foodCartItem.setImageUrl(foodImageResId);
 
             String priceString = foodPrice;
             // Remove the dollar sign and trim whitespace
@@ -90,8 +105,6 @@ public class FoodActivity extends BaseActivity {
             // Output: 50.00
 
             foodCartItem.setPrice(foodPrice);
-            foodCartItem.setQuantity(quantity);
-            foodCartItem.setImageUrl(foodImageResId);
 
             // Insert into SQLite database
             dbHelper.addToCart(foodCartItem);
