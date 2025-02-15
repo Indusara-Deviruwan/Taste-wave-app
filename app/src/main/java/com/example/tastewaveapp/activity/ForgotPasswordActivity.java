@@ -14,14 +14,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tastewaveapp.R;
-import com.example.tastewaveapp.databasehelper.DatabaseHelper;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    private EditText emailEditText, editTextForgotPasswordPhone;
+    private EditText emailEditText;
     private ImageButton buttonBackToSignIn;
     private Button buttonSendDetails;
-    private DatabaseHelper databaseHelper; // Assuming you have a DatabaseHelper for user management.
+    private FirebaseAuth auth;  // Firebase Auth instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,32 +35,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
         emailEditText = findViewById(R.id.editTextForgotPasswordEmail);
-        editTextForgotPasswordPhone = findViewById(R.id.editTextForgotPasswordPhone);
         buttonBackToSignIn = findViewById(R.id.buttonBackToSignIn);
         buttonSendDetails = findViewById(R.id.buttonSendDetails);
 
+        auth = FirebaseAuth.getInstance();  // Initialize Firebase Auth
 
-        databaseHelper = new DatabaseHelper(this);
-
-        // Handle Reset Password
-    /*    resetPasswordButton.setOnClickListener(view -> {
-            String email = emailEditText.getText().toString().trim();
-
-            if (email.isEmpty()) {
-                Toast.makeText(ForgotPasswordActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
-            } else if (databaseHelper.isEmailRegistered(email)) { // Check if email exists in DB
-                // For simplicity, just show a message
-                Toast.makeText(ForgotPasswordActivity.this,
-                        "Password reset instructions have been sent to your email.",
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(ForgotPasswordActivity.this,
-                        "Email is not registered",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }); */
-
-        // Handle Back to Sign In
         buttonBackToSignIn.setOnClickListener(view -> {
             Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
             startActivity(intent);
@@ -68,11 +47,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
         buttonSendDetails.setOnClickListener(view -> {
-            Intent intent = new Intent(ForgotPasswordActivity.this, EnterOtpActivity.class);
-            startActivity(intent);
-            finish();
+            String email = emailEditText.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(ForgotPasswordActivity.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+            } else {
+                resetPassword(email);
+            }
         });
-
     }
 
+    // Method to reset password using Firebase Authentication
+    private void resetPassword(String email) {
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(ForgotPasswordActivity.this, "Password reset email sent.", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ForgotPasswordActivity.this, LogInActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(ForgotPasswordActivity.this, "Failed to send reset email.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }
