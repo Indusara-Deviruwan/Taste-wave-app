@@ -13,8 +13,13 @@ import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
 import com.example.tastewaveapp.databasehelper.OrderDatabaseHelper;
 import com.example.tastewaveapp.model.FoodCart;
 import com.example.tastewaveapp.model.Order;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderConfirmationActivity extends AppCompatActivity {
 
@@ -64,11 +69,11 @@ public class OrderConfirmationActivity extends AppCompatActivity {
 
         // Ensure all delivery details are properly displayed
 
-        String residenceInfo = ( deliveryAddress != null && ! deliveryAddress.isEmpty()) ?  deliveryAddress : "Not provided";
+        String residenceInfo = (deliveryAddress != null && !deliveryAddress.isEmpty()) ? deliveryAddress : "Not provided";
 
-        String paymentInfo = ( paymentDetails != null && ! paymentDetails.isEmpty()) ?  paymentDetails : "Not provided";
+        String paymentInfo = (paymentDetails != null && !paymentDetails.isEmpty()) ? paymentDetails : "Not provided";
         orderDetailsTextView.setText(
-                        "\nDelivery Details: " + residenceInfo +
+                "\nDelivery Details: " + residenceInfo +
                         "\n\nPayment Details:\n" + paymentInfo +
                         "\n\nFood Items:\n" + foodItems.toString()
         );
@@ -83,6 +88,7 @@ public class OrderConfirmationActivity extends AppCompatActivity {
             return;
         }
 
+        // Create the order for SQLite
         Order newOrder = new Order();
         newOrder.setUserId(userId);
         newOrder.setFoodItems(cartItems);
@@ -91,20 +97,56 @@ public class OrderConfirmationActivity extends AppCompatActivity {
         newOrder.setOrderDate("2025-02-12");
         newOrder.setDeliveryAddress(deliveryAddress); // Combine delivery address details
 
-        boolean isOrderInserted = orderDatabaseHelper.insertOrder(newOrder);
+        // Insert order into SQLite database and get the generated orderId
+        long orderId = orderDatabaseHelper.insertOrder(newOrder);
 
-        if (isOrderInserted) {
-            // Clear cart items after successful order placement
-            CartDatabaseHelper cartDatabaseHelper = new CartDatabaseHelper(OrderConfirmationActivity.this);
-            cartDatabaseHelper.clearCart();
+        if (orderId != -1) {
+            // Add the order to Firestore using the same orderId
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            CollectionReference ordersCollection = firestore.collection("orders");
 
-            Intent homeIntent = new Intent(OrderConfirmationActivity.this, OrderActivity.class);
-            Toast.makeText(OrderConfirmationActivity.this, "Order Placed successfully", Toast.LENGTH_SHORT).show();
-            startActivity(homeIntent);
-            finish();
+            // Create a map of the order details for Firestore
+            Map<String, Object> orderData = new HashMap<>();
+            orderData.put("orderId", orderId);  // Use the orderId from SQLite
+            orderData.put("userId", userId);
+            orderData.put("totalPrice", totalPrice);
+            orderData.put("status", "Pending");
+            orderData.put("orderDate", "2025-02-12");
+            orderData.put("deliveryAddress", deliveryAddress);
+
+            // Add each food item to Firestore
+            List<Map<String, Object>> foodItemsData = new ArrayList<>();
+            for (FoodCart foodItem : cartItems) {
+                Map<String, Object> foodItemData = new HashMap<>();
+                foodItemData.put("foodName", foodItem.getName());
+                foodItemData.put("foodQuantity", foodItem.getQuantity());
+                foodItemData.put("restaurantId", foodItem.getRestaurantId());
+                foodItemData.put("restaurantName", foodItem.getRestaurantName());
+                foodItemsData.add(foodItemData);
+            }
+            orderData.put("foodItems", foodItemsData);
+
+            // Add the order to Firestore
+            ordersCollection.document(String.valueOf(orderId)) // Use orderId as document ID
+                    .set(orderData)
+                    .addOnSuccessListener(aVoid -> {
+                        // Clear cart items after successful order placement
+                        CartDatabaseHelper cartDatabaseHelper = new CartDatabaseHelper(OrderConfirmationActivity.this);
+                        cartDatabaseHelper.clearCart();
+
+                        // Navigate to OrderActivity
+                        Intent homeIntent = new Intent(OrderConfirmationActivity.this, OrderActivity.class);
+                        Toast.makeText(OrderConfirmationActivity.this, "Order Placed successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(homeIntent);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(OrderConfirmationActivity.this, "Order failed to store in Firestore. Please try again.", Toast.LENGTH_SHORT).show();
+                    });
         } else {
             Toast.makeText(OrderConfirmationActivity.this, "Order failed. Please try again.", Toast.LENGTH_SHORT).show();
         }
+
     }
 
 }

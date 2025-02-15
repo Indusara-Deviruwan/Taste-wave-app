@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/lay_upper_body"
-        android:layout_width="416dp"
+        android:layout_width="match_parent"
         android:layout_height="568dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
@@ -110,7 +110,7 @@
 
     <Button
         android:id="@+id/btn_continue"
-        android:layout_width="376dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"

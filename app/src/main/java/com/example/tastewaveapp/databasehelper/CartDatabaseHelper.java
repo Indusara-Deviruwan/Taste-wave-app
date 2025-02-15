@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CartDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "cart.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static final String TABLE_CART = "cart";
     public static final String COLUMN_ID = "id";

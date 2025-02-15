@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "orders.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static final String TABLE_ORDERS = "orders";
     public static final String COLUMN_ID = "order_id";
@@ -70,7 +70,7 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertOrder(Order order) {
+    public long insertOrder(Order order) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_ID, order.getUserId());
@@ -79,15 +79,14 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ORDER_DATE, order.getOrderDate());
         values.put(COLUMN_DELIVERY_ADDRESS, order.getDeliveryAddress());
 
-        long result = db.insert(TABLE_ORDERS, null, values);
+        long orderId = db.insert(TABLE_ORDERS, null, values); // Insert and get the generated orderId
 
-        if (result == -1) {
+        if (orderId == -1) {
             db.close();
-            return false;
+            return -1;  // Order insertion failed
         }
 
         // Insert each food item associated with the order
-        long orderId = result;
         for (FoodCart foodItem : order.getFoodItems()) {
             ContentValues foodItemValues = new ContentValues();
             foodItemValues.put(COLUMN_ORDER_ID_FOOD, orderId);
@@ -103,8 +102,9 @@ public class OrderDatabaseHelper extends SQLiteOpenHelper {
         }
 
         db.close();
-        return true;
+        return orderId;  // Return the generated orderId
     }
+
 
     public Order getOrderById(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
