@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.tastewaveapp.R;
@@ -42,6 +43,7 @@ public class HomeActivity extends BaseActivity {
     private RestaurantAdapter restaurantAdapter;
     private Toolbar toolbar; // Toolbar reference
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,22 @@ public class HomeActivity extends BaseActivity {
         listView.setAdapter(restaurantAdapter);
 
         fetchRestaurants();
+
+        // Set listener to filter restaurants based on search query
+        SearchView searchView = findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterRestaurants(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterRestaurants(newText);
+                return true;
+            }
+        });
 
         // Map Button Click Listener
         buttonLocation.setOnClickListener(v -> {
@@ -102,7 +120,7 @@ public class HomeActivity extends BaseActivity {
 
         restaurantsRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    restaurantList.clear();
+                    List<Restaurant> fullRestaurantList = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                         String restaurantId = document.getId();
                         String name = document.getString("name");
@@ -112,12 +130,13 @@ public class HomeActivity extends BaseActivity {
                         GeoPoint location = document.getGeoPoint("location");
 
                         Restaurant restaurant = new Restaurant(restaurantId, name, description, imageResId, rating, location);
-                        restaurantList.add(restaurant);
+                        fullRestaurantList.add(restaurant);
                     }
 
-                    restaurantAdapter.notifyDataSetChanged();
+                    // Update adapter with the full list
+                    restaurantAdapter.updateRestaurants(fullRestaurantList);
 
-                    if (restaurantList.isEmpty()) {
+                    if (fullRestaurantList.isEmpty()) {
                         Toast.makeText(this, "No restaurants found", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "Restaurants loaded successfully", Toast.LENGTH_SHORT).show();
@@ -128,6 +147,59 @@ public class HomeActivity extends BaseActivity {
                     Toast.makeText(this, "Failed to load restaurants", Toast.LENGTH_SHORT).show();
                 });
     }
+
+
+    private void filterRestaurants(String query) {
+        // If query is empty, just fetch all restaurants.
+        if (query.isEmpty()) {
+            fetchRestaurants();
+            return;
+        }
+
+        // Convert the query to lowercase for case-insensitive comparison.
+        final String queryLower = query.toLowerCase();
+        Log.d(TAG, "Filtering restaurants with query: " + queryLower);
+
+        // Fetch all restaurants from Firestore.
+        db.collection("Restaurants")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Restaurant> allRestaurants = new ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                            Restaurant restaurant = document.toObject(Restaurant.class);
+                            allRestaurants.add(restaurant);
+                        }
+
+                        // Filter restaurants where the name contains the query letter(s)
+                        List<Restaurant> filteredRestaurants = new ArrayList<>();
+                        for (Restaurant restaurant : allRestaurants) {
+                            // Ensure restaurant name isn't null.
+                            if (restaurant.getName() != null &&
+                                    restaurant.getName().toLowerCase().contains(queryLower)) {
+                                filteredRestaurants.add(restaurant);
+                            }
+                        }
+
+                        // Log and show toast if no restaurants match.
+                        if (filteredRestaurants.isEmpty()) {
+                            Log.d(TAG, "No restaurants found matching query.");
+                            Toast.makeText(HomeActivity.this, "No restaurants found", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "Found " + filteredRestaurants.size() + " restaurants.");
+                        }
+
+                        // Update adapter with the filtered list.
+                        restaurantAdapter.updateRestaurants(filteredRestaurants);
+                    } else {
+                        Log.e(TAG, "Error fetching restaurants: ", task.getException());
+                        Toast.makeText(HomeActivity.this, "Error getting restaurants.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+
 
     // Inflate the menu
     @Override
@@ -172,7 +244,7 @@ public class HomeActivity extends BaseActivity {
         }
         if (item.getItemId() == R.id.action_notification) {
             Toast.makeText(this, "Notification Clicked", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, OffersActivity.class)); // Navigate to LoginActivity
+            startActivity(new Intent(this, MyReviewRatingActivity.class)); // Navigate to LoginActivity
             return true;
         }
         return super.onOptionsItemSelected(item);

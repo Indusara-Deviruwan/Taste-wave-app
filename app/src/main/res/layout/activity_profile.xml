@@ -46,16 +46,20 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Profile Picture -->
-                <ImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
-                    android:contentDescription="Profile Picture"
+                <!-- Lottie Animation at the Top -->
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieAnimationView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="88dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/splash_2" />
+                    android:layout_gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_rawRes="@raw/profile"
+                    android:paddingBottom="20dp"/>
 
                 <!-- Edit Picture Button -->
                 <com.google.android.material.button.MaterialButton
@@ -65,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="16dp"
-                    android:text="Edit Picture" />
+                    android:text="Edit Picture"
+                    android:visibility="gone"/>
 
                 <!-- Name -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -111,21 +116,6 @@
                         android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Password -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/password_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:hint="Password">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/password_field"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <!-- Address -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/address_layout"
@@ -141,42 +131,20 @@
                         android:inputType="textPostalAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Payment Options -->
-                <TextView
-                    android:id="@+id/payment_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Payment Options"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:id="@+id/payment_options"
+                <!-- Birthday -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/birthday_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:orientation="vertical">
+                    android:hint="Birthday">
 
-                    <RadioButton
-                        android:id="@+id/rb_cash"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/birthday_field"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cash on Delivery" />
-
-                    <RadioButton
-                        android:id="@+id/rb_credit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Credit Card" />
-
-                    <RadioButton
-                        android:id="@+id/rb_visa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Visa Card" />
-                </RadioGroup>
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Edit Details Button -->
                 <com.google.android.material.button.MaterialButton
@@ -185,7 +153,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Edit Details" />
+                    android:text="Edit Details"
+                    android:visibility="gone"/>
+
                 <!-- Save Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/save_button"
@@ -193,7 +163,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Save Details" />
+                    android:text="Save Details"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

@@ -20,6 +20,9 @@
         android:theme="@style/Theme.TasteWaveApp"
         tools:targetApi="31">
         <activity
+            android:name=".activity.MyReviewRatingActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.TrackingActivity"
             android:exported="false" />
         <activity
@@ -42,7 +45,7 @@
             android:name=".activity.EnterOtpActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.OffersActivity"
+            android:name=".activity.ReviewRatingActivity"
             android:exported="false" />
         <activity
             android:name=".activity.ProfileActivity"

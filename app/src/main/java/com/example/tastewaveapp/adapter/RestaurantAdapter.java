@@ -31,7 +31,6 @@ public class RestaurantAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
 
     public RestaurantAdapter(Context context, List<Restaurant> restaurantList) {
-
         this.context = context;
         this.restaurantList = restaurantList;
         this.inflater = LayoutInflater.from(context);
@@ -68,39 +67,30 @@ public class RestaurantAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        // Get the current restaurant
         Restaurant restaurant = restaurantList.get(position);
 
-        // Load image from URL using Glide
+        // Load image with Glide
         Glide.with(context)
                 .load(restaurant.getImageResId())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        Log.e("GlideError", "Failed to load image: ", e);
-                        return false; // Allow Glide to handle the error
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .placeholder(R.drawable.splash_3) // Placeholder while loading
-                .error(R.drawable.splash_4) // Error image if loading fails
+                .placeholder(R.drawable.splash_3)
+                .error(R.drawable.splash_4)
                 .into(holder.imageView);
 
-
-        // Set name and description
         holder.nameTextView.setText(restaurant.getName());
         holder.descriptionTextView.setText(restaurant.getDescription());
 
-        // Handle favorite button click
         holder.favoriteButton.setOnClickListener(v ->
                 Toast.makeText(context, "Favorite clicked for " + restaurant.getName(), Toast.LENGTH_SHORT).show()
         );
 
         return convertView;
+    }
+
+    // Update the existing list rather than replacing the reference
+    public void updateRestaurants(List<Restaurant> newList) {
+        restaurantList.clear();
+        restaurantList.addAll(newList);
+        notifyDataSetChanged();
     }
 
     private static class ViewHolder {

@@ -51,4 +51,11 @@ public class RestaurantDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_RESTAURANTS, null);
     }
+
+    // Method to get restaurants by name (case-insensitive)
+    public Cursor getRestaurantsByName(String restaurantName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_RESTAURANTS + " WHERE " + COLUMN_NAME + " LIKE ?";
+        return db.rawQuery(query, new String[]{"%" + restaurantName + "%"});
+    }
 }

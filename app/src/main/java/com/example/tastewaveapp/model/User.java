@@ -7,15 +7,25 @@ public class User {
     private String password;
     private String phone;
     private String address;
+    private String birthDay;
 
     // Constructor
-    public User(int id, String name, String email, String password, String phone, String address) {
+    public User(int id, String name, String email, String password, String phone, String address, String birthDay) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.birthDay = birthDay;
+    }
+
+    public String getBirthDay() {
+        return birthDay;
+    }
+
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
     }
 
     // Empty Constructor

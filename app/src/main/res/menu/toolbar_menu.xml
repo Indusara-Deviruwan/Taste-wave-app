@@ -10,7 +10,7 @@
     <item
         android:id="@+id/action_notification"
         android:icon="@drawable/menu"
-        android:title="Notification"
+        android:title="My Reviews"
          />
 
 </menu>

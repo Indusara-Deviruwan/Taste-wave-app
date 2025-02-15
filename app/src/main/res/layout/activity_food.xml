@@ -141,11 +141,11 @@
 
     <!-- Add to Cart Button -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_add_to_cart"
-        android:layout_width="0dp"
+        android:id="@+id/button_add_review_rating"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primary_color"
-        android:text="Add to Cart"
+        android:text="Add Review and Rating"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         app:cornerRadius="8dp"

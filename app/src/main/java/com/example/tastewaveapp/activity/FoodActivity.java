@@ -1,17 +1,12 @@
 package com.example.tastewaveapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.tastewaveapp.R;
-import com.example.tastewaveapp.databasehelper.CartDatabaseHelper;
-import com.example.tastewaveapp.model.FoodCart;
 import com.google.android.material.button.MaterialButton;
 
 public class FoodActivity extends BaseActivity {
@@ -19,20 +14,18 @@ public class FoodActivity extends BaseActivity {
     private TextView quantityTextView;
     private int quantity = 0;
     private String foodPrice;
-    private String restaurantId,restaurantName;
-    private String foodId,foodName, foodDescription, foodImageResId;
-    private CartDatabaseHelper dbHelper;
+    private String restaurantId, restaurantName;
+    private String foodId, foodName, foodDescription, foodImageResId;
+    // Removed CartDatabaseHelper since we're not using add-to-cart functionality anymore
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
 
-        // Setup Bottom Navigation
+        // Setup Bottom Navigation and Toolbar
         setupBottomNavigation();
         setupToolbar("Food");
-
-        dbHelper = new CartDatabaseHelper(this);
 
         // Get food details from intent
         restaurantId = getIntent().getStringExtra("restaurant_id");
@@ -75,49 +68,26 @@ public class FoodActivity extends BaseActivity {
             updateQuantity();
         });
 
-        // Setup Add to Cart button
-        MaterialButton buttonAddToCart = findViewById(R.id.button_add_to_cart);
-        buttonAddToCart.setOnClickListener(v -> addToCart());
+        // Setup Add Review Rating button (changed from Add to Cart)
+        MaterialButton buttonAddReviewRating = findViewById(R.id.button_add_review_rating);
+        buttonAddReviewRating.setOnClickListener(v -> AddReviewRating());
     }
 
     private void updateQuantity() {
         quantityTextView.setText(String.valueOf(quantity));
     }
 
-    private void addToCart() {
-        if (quantity > 0) {
-            // Create FoodCart object to add to the database
-            FoodCart foodCartItem = new FoodCart();
-
-            foodCartItem.setRestaurantId(restaurantId);
-            foodCartItem.setRestaurantName(restaurantName);
-            //foodCartItem.setId(foodId);
-            foodCartItem.setName(foodName);
-            foodCartItem.setDescription(foodDescription);
-            foodCartItem.setQuantity(quantity);
-            foodCartItem.setImageUrl(foodImageResId);
-
-            String priceString = foodPrice;
-            // Remove the dollar sign and trim whitespace
-            String cleanPrice = priceString.replace("$", "").trim();
-            // Convert to double
-            double foodPrice = Double.parseDouble(cleanPrice);
-            // Output: 50.00
-
-            foodCartItem.setPrice(foodPrice);
-
-            // Insert into SQLite database
-            dbHelper.addToCart(foodCartItem);
-
-            // Close the database
-            dbHelper.close();
-
-            // Show success toast message
-            Toast.makeText(this, "Item added to cart", Toast.LENGTH_SHORT).show();
-        } else {
-            // Show error toast message if quantity is zero
-            Toast.makeText(this, "Quantity must be greater than zero", Toast.LENGTH_SHORT).show();
-        }
+    // This method launches the ReviewRatingActivity and passes food and restaurant details
+    private void AddReviewRating() {
+        Intent intent = new Intent(FoodActivity.this, ReviewRatingActivity.class);
+        intent.putExtra("restaurant_id", restaurantId);
+        intent.putExtra("restaurant_name", restaurantName);
+        intent.putExtra("food_id", foodId);
+        intent.putExtra("food_name", foodName);
+        intent.putExtra("food_description", foodDescription);
+        intent.putExtra("food_image", foodImageResId);
+        intent.putExtra("food_price", foodPrice);
+        startActivity(intent);
     }
 
     @Override
